@@ -8,7 +8,18 @@
         body { margin: 0; padding: 0; background-color: #f0f0f0; font-family: Arial, sans-serif; overflow: hidden; }
         #gameContainer { position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         canvas { border: 1px solid #000; max-width: 100%; max-height: 70vh; }
-        #scoreDisplay { position: absolute; top: 10px; left: 10px; font-size: 16px; color: white; text-shadow: 1px 1px 2px black; }
+        #scoreDisplay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            line-height: 1;
+            padding: 2px 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+        }
         #comboDisplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 30px; color: white; text-shadow: 2px 2px 4px black; display: none; }
     </style>
 </head>
@@ -53,8 +64,8 @@
         let touchStartY = 0;
         let touchStartTime = 0;
         let isTouchHolding = false;
-        let isComboOngoing = false;
-        let hasCleared = false;
+        let lastClearedTime = 0;
+        const comboTimeThreshold = 1000;
 
         function resizeCanvas() {
             const containerWidth = document.getElementById('gameContainer').clientWidth;
@@ -68,11 +79,6 @@
         }
 
         function createPiece() {
-            if (!hasCleared) {
-                isComboOngoing = false;
-                comboCount = 0;
-            }
-            hasCleared = false;
             const pieceType = Math.floor(Math.random() * pieces.length);
             const colorIndex = Math.floor(Math.random() * colors.length);
             return {
@@ -164,18 +170,21 @@
                     }
                 }
             }
+            
+            const currentTime = Date.now();
             if (cleared) {
-                hasCleared = true;
-                if (!isComboOngoing) {
-                    comboCount = 1;
-                    isComboOngoing = true;
-                } else {
+                if (currentTime - lastClearedTime < comboTimeThreshold) {
                     comboCount++;
+                } else {
+                    comboCount = 1;
                 }
+                lastClearedTime = currentTime;
+                
                 score += calculateComboScore(comboCount, clearedLines);
                 showComboDisplay(comboCount);
                 maxCombo = Math.max(maxCombo, comboCount);
             }
+            
             return cleared;
         }
 
@@ -308,9 +317,8 @@
             maxCombo = 0;
             isSettling = false;
             isClearing = false;
-            isComboOngoing = false;
-            hasCleared = false;
             frameCount = 0;
+            lastClearedTime = 0;
             currentPiece = createPiece();
             updateScoreDisplay();
             gameState = 'playing';
