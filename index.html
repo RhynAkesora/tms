@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>魂テトリス</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f0f0f0; font-family: Arial, sans-serif; overflow: hidden; }
+        #gameContainer { position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        canvas { border: 1px solid #000; max-width: 100%; max-height: 70vh; }
+        #scoreDisplay { position: absolute; top: 10px; left: 10px; font-size: 16px; color: white; text-shadow: 1px 1px 2px black; }
+        #comboDisplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 30px; color: white; text-shadow: 2px 2px 4px black; display: none; }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="scoreDisplay">スコア: 0 最高コンボ: 0</div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="comboDisplay"></div>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplayElement = document.getElementById('scoreDisplay');
+        const comboDisplayElement = document.getElementById('comboDisplay');
+        const gridWidth = 10;
+        const gridHeight = 20;
+        const cellDivisions = 5;
+        const colors = ['#FF0000', '#0000FF', '#00FF00', '#FFFF00'];
+        const pieces = [
+            [[1,1,1,1]],
+            [[1,1],[1,1]],
+            [[1,1,1],[0,1,0]],
+            [[1,1,1],[1,0,0]],
+            [[1,1,1],[0,0,1]],
+            [[1,1,0],[0,1,1]],
+            [[0,1,1],[1,1,0]]
+        ];
+
+        let cellSize, sandSize;
+        let sandParticles = [];
+        let currentPiece;
+        let score = 0;
+        let gameLoop;
+        let frameCount = 0;
+        let isSettling = false;
+        let isClearing = false;
+        let comboCount = 0;
+        let maxCombo = 0;
+        let gameState = 'start';
+        let comboDisplayTimeout;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let isTouchHolding = false;
+        let isComboOngoing = false;
+        let hasCleared = false;
+
+        function resizeCanvas() {
+            const containerWidth = document.getElementById('gameContainer').clientWidth;
+            const containerHeight = document.getElementById('gameContainer').clientHeight;
+            const maxWidth = containerWidth * 0.9;
+            const maxHeight = containerHeight * 0.7;
+            cellSize = Math.floor(Math.min(maxWidth / gridWidth, maxHeight / gridHeight));
+            sandSize = cellSize / cellDivisions;
+            canvas.width = cellSize * gridWidth;
+            canvas.height = cellSize * gridHeight;
+        }
+
+        function createPiece() {
+            if (!hasCleared) {
+                isComboOngoing = false;
+                comboCount = 0;
+            }
+            hasCleared = false;
+            const pieceType = Math.floor(Math.random() * pieces.length);
+            const colorIndex = Math.floor(Math.random() * colors.length);
+            return {
+                shape: pieces[pieceType],
+                color: colorIndex,
+                x: Math.floor(gridWidth / 2) - Math.floor(pieces[pieceType][0].length / 2),
+                y: 0
+            };
+        }
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const particle of sandParticles) {
+                ctx.fillStyle = colors[particle.color];
+                ctx.fillRect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
+            }
+        }
+
+        function drawPiece() {
+            if (!currentPiece) return;
+            ctx.fillStyle = colors[currentPiece.color];
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x]) {
+                        ctx.fillRect((currentPiece.x + x) * cellSize, (currentPiece.y + y) * cellSize, cellSize - 1, cellSize - 1);
+                    }
+                }
+            }
+        }
+
+        function canMove(dx, dy) {
+            if (!currentPiece) return false;
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x]) {
+                        const newX = currentPiece.x + x + dx;
+                        const newY = currentPiece.y + y + dy;
+                        if (newX < 0 || newX >= gridWidth || newY >= gridHeight || 
+                            sandParticles.some(p => Math.floor(p.x / cellDivisions) === newX && Math.floor(p.y / cellDivisions) === newY)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function rotate() {
+            if (!currentPiece) return;
+            const rotated = currentPiece.shape[0].map((_, i) => currentPiece.shape.map(row => row[i]).reverse());
+            const previousShape = currentPiece.shape;
+            currentPiece.shape = rotated;
+            if (!canMove(0, 0)) {
+                currentPiece.shape = previousShape;
+            }
+        }
+
+        function mergePiece() {
+            if (!currentPiece) return;
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x]) {
+                        for (let i = 0; i < cellDivisions; i++) {
+                            for (let j = 0; j < cellDivisions; j++) {
+                                sandParticles.push({
+                                    x: (currentPiece.x + x) * cellDivisions + i,
+                                    y: (currentPiece.y + y) * cellDivisions + j,
+                                    color: currentPiece.color
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            currentPiece = null;
+            isSettling = true;
+        }
+
+        function checkAndClearLines() {
+            let cleared = false;
+            let clearedLines = 0;
+            for (let color = 0; color < colors.length; color++) {
+                const connectedComponents = findConnectedComponents(color);
+                for (const component of connectedComponents) {
+                    if (isFullWidth(component)) {
+                        removeSandParticles(component);
+                        cleared = true;
+                        clearedLines++;
+                    }
+                }
+            }
+            if (cleared) {
+                hasCleared = true;
+                if (!isComboOngoing) {
+                    comboCount = 1;
+                    isComboOngoing = true;
+                } else {
+                    comboCount++;
+                }
+                score += calculateComboScore(comboCount, clearedLines);
+                showComboDisplay(comboCount);
+                maxCombo = Math.max(maxCombo, comboCount);
+            }
+            return cleared;
+        }
+
+        function findConnectedComponents(color) {
+            const visited = new Set();
+            const components = [];
+            for (const particle of sandParticles) {
+                if (particle.color === color && !visited.has(`${particle.x},${particle.y}`)) {
+                    const component = new Set();
+                    dfs(particle, color, visited, component);
+                    components.push(component);
+                }
+            }
+            return components;
+        }
+
+        function dfs(particle, color, visited, component) {
+            const key = `${particle.x},${particle.y}`;
+            if (visited.has(key)) return;
+            visited.add(key);
+            component.add(key);
+
+            const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+            for (const [dx, dy] of directions) {
+                const newX = particle.x + dx;
+                const newY = particle.y + dy;
+                const neighbor = sandParticles.find(p => p.x === newX && p.y === newY && p.color === color);
+                if (neighbor) {
+                    dfs(neighbor, color, visited, component);
+                }
+            }
+        }
+
+        function isFullWidth(component) {
+            let minX = gridWidth * cellDivisions;
+            let maxX = 0;
+            for (const key of component) {
+                const [x, _] = key.split(',').map(Number);
+                minX = Math.min(minX, x);
+                maxX = Math.max(maxX, x);
+            }
+            return maxX - minX + 1 === gridWidth * cellDivisions;
+        }
+
+        function removeSandParticles(component) {
+            sandParticles = sandParticles.filter(p => !component.has(`${p.x},${p.y}`));
+        }
+
+        function simulateSand() {
+            let moved = false;
+            sandParticles.sort((a, b) => b.y - a.y);
+            for (const particle of sandParticles) {
+                if (particle.y < gridHeight * cellDivisions - 1 && !sandParticles.some(p => p.x === particle.x && p.y === particle.y + 1)) {
+                    particle.y++;
+                    moved = true;
+                } else if (particle.y < gridHeight * cellDivisions - 1) {
+                    const leftClear = particle.x > 0 && !sandParticles.some(p => p.x === particle.x - 1 && p.y === particle.y + 1);
+                    const rightClear = particle.x < gridWidth * cellDivisions - 1 && !sandParticles.some(p => p.x === particle.x + 1 && p.y === particle.y + 1);
+                    if (leftClear && rightClear) {
+                        particle.x += Math.random() < 0.5 ? -1 : 1;
+                        particle.y++;
+                        moved = true;
+                    } else if (leftClear) {
+                        particle.x--;
+                        particle.y++;
+                        moved = true;
+                    } else if (rightClear) {
+                        particle.x++;
+                        particle.y++;
+                        moved = true;
+                    }
+                }
+            }
+            return moved;
+        }
+
+        function calculateComboScore(combo, lines) {
+            const baseScore = lines * 100;
+            let multiplier = 1 + (combo - 1) * 0.5;
+            return Math.floor(baseScore * multiplier);
+        }
+
+        function showComboDisplay(combo) {
+            if (combo < 2) return;
+            comboDisplayElement.textContent = `${combo} コンボ!`;
+            comboDisplayElement.style.display = 'block';
+            clearTimeout(comboDisplayTimeout);
+            comboDisplayTimeout = setTimeout(() => {
+                comboDisplayElement.style.display = 'none';
+            }, 2000);
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}`;
+        }
+
+        function gameOver() {
+            gameState = 'gameOver';
+            cancelAnimationFrame(gameLoop);
+            drawGameOverScreen();
+        }
+
+        function drawStartScreen() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('魂テトリス', canvas.width / 2, canvas.height / 2 - 40);
+            ctx.font = '20px Arial';
+            ctx.fillText('タップして開始', canvas.width / 2, canvas.height / 2 + 20);
+        }
+
+        function drawGameOverScreen() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('ゲームオーバー', canvas.width / 2, canvas.height / 2 - 40);
+            ctx.font = '20px Arial';
+            ctx.fillText(`最終スコア: ${score}`, canvas.width / 2, canvas.height / 2);
+            ctx.fillText('タップしてリトライ', canvas.width / 2, canvas.height / 2 + 40);
+        }
+
+        function resetGame() {
+            sandParticles = [];
+            score = 0;
+            comboCount = 0;
+            maxCombo = 0;
+            isSettling = false;
+            isClearing = false;
+            isComboOngoing = false;
+            hasCleared = false;
+            frameCount = 0;
+            currentPiece = createPiece();
+            updateScoreDisplay();
+            gameState = 'playing';
+            update();
+        }
+
+        function update() {
+            if (gameState !== 'playing') return;
+
+            frameCount++;
+            if (frameCount % 30 === 0 && !isSettling && !isClearing && currentPiece) {
+                if (canMove(0, 1)) {
+                    currentPiece.y++;
+                } else {
+                    mergePiece();
+                    isSettling = true;
+                }
+            }
+
+            if (isSettling) {
+                if (!simulateSand()) {
+                    isSettling = false;
+                    isClearing = true;
+                }
+            }
+
+            if (isClearing) {
+                const cleared = checkAndClearLines();
+                if (cleared) {
+                    isSettling = true;
+                } else {
+                    isClearing = false;
+                    if (!currentPiece) {
+                        currentPiece = createPiece();
+                        if (!canMove(0, 0)) {
+                            gameOver();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            drawGrid();
+            if (currentPiece && !isSettling && !isClearing) {
+                drawPiece();
+            }
+
+            updateScoreDisplay();
+            gameLoop = requestAnimationFrame(update);
+        }
+
+        function handleTouch(action) {
+            if (gameState !== 'playing') return;
+
+            switch (action) {
+                case 'left':
+                    if (canMove(-1, 0)) currentPiece.x--;
+                    break;
+                case 'right':
+                    if (canMove(1, 0)) currentPiece.x++;
+                    break;
+                case 'rotate':
+                    rotate();
+                    break;
+                case 'drop':
+                    while (canMove(0, 1)) {
+                        currentPiece.y++;
+                    }
+                    mergePiece();
+                    break;
+            }
+        }
+
+        function handleCanvasClick(e) {
+            e.preventDefault();
+            if (gameState === 'start' || gameState === 'gameOver') {
+                resetGame();
+            }
+        }
+
+        function initEventListeners() {
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchStartTime = Date.now();
+                isTouchHolding = true;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (gameState !== 'playing') return;
+
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - touchStartX;
+                const deltaY = touch.clientY - touchStartY;
+
+                if (Math.abs(deltaX) > cellSize) {
+                    handleTouch(deltaX > 0 ? 'right' : 'left');
+                    touchStartX = touch.clientX;
+                }
+
+                if (deltaY > cellSize && isTouchHolding) {
+                    handleTouch('drop');
+                    isTouchHolding = false;
+                }
+            });
+
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const touchEndTime = Date.now();
+                const touchDuration = touchEndTime - touchStartTime;
+
+                if (touchDuration < 200 && isTouchHolding) {
+                    handleTouch('rotate');
+                }
+
+                isTouchHolding = false;
+            });
+
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.addEventListener('touchend', handleCanvasClick);
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                if (gameState === 'start') {
+                    drawStartScreen();
+                } else if (gameState === 'gameOver') {
+                    drawGameOverScreen();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (gameState === 'playing') {
+                    switch (event.code) {
+                        case 'ArrowLeft':
+                            handleTouch('left');
+                            break;
+                        case 'ArrowRight':
+                            handleTouch('right');
+                            break;
+                        case 'ArrowUp':
+                            handleTouch('rotate');
+                            break;
+                        case 'ArrowDown':
+                            handleTouch('drop');
+                            break;
+                    }
+                } else if (event.code === 'Space' && (gameState === 'start' || gameState === 'gameOver')) {
+                    resetGame();
+                }
+            });
+        }
+
+        function init() {
+            resizeCanvas();
+            initEventListeners();
+            drawStartScreen();
+        }
+
+        init();
+    </script>
+</body>
+</html>
