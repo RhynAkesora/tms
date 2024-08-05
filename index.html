@@ -6,8 +6,21 @@
     <title>魂テトリス</title>
     <style>
         body { margin: 0; padding: 0; background-color: #f0f0f0; font-family: Arial, sans-serif; overflow: hidden; }
-        #gameContainer { position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        canvas { border: 1px solid #000; max-width: 100%; max-height: 70vh; }
+        #gameContainer { 
+            position: relative; 
+            width: 100vw; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start;
+            align-items: center; 
+            padding-top: 10px;
+        }
+        canvas { 
+            border: 1px solid #000; 
+            max-width: 95vw;
+            max-height: 80vh;
+        }
         #scoreDisplay {
             position: absolute;
             top: 0;
@@ -16,11 +29,22 @@
             color: white;
             text-shadow: 1px 1px 2px black;
             line-height: 1;
-            padding: 2px 5px;
+            padding: 5px;
             background-color: rgba(0, 0, 0, 0.5);
             white-space: nowrap;
+            z-index: 10;
         }
-        #comboDisplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 30px; color: white; text-shadow: 2px 2px 4px black; display: none; }
+        #comboDisplay { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 24px;
+            color: white; 
+            text-shadow: 2px 2px 4px black; 
+            display: none; 
+            z-index: 20;
+        }
     </style>
 </head>
 <body>
@@ -70,8 +94,8 @@
         function resizeCanvas() {
             const containerWidth = document.getElementById('gameContainer').clientWidth;
             const containerHeight = document.getElementById('gameContainer').clientHeight;
-            const maxWidth = containerWidth * 0.9;
-            const maxHeight = containerHeight * 0.7;
+            const maxWidth = Math.min(containerWidth * 0.95, containerHeight * 0.5 * (gridWidth / gridHeight));
+            const maxHeight = Math.min(containerHeight * 0.8, containerWidth * 2 * (gridHeight / gridWidth));
             cellSize = Math.floor(Math.min(maxWidth / gridWidth, maxHeight / gridHeight));
             sandSize = cellSize / cellDivisions;
             canvas.width = cellSize * gridWidth;
@@ -157,37 +181,6 @@
             isSettling = true;
         }
 
-        function checkAndClearLines() {
-            let cleared = false;
-            let clearedLines = 0;
-            for (let color = 0; color < colors.length; color++) {
-                const connectedComponents = findConnectedComponents(color);
-                for (const component of connectedComponents) {
-                    if (isFullWidth(component)) {
-                        removeSandParticles(component);
-                        cleared = true;
-                        clearedLines++;
-                    }
-                }
-            }
-            
-            const currentTime = Date.now();
-            if (cleared) {
-                if (currentTime - lastClearedTime < comboTimeThreshold) {
-                    comboCount++;
-                } else {
-                    comboCount = 1;
-                }
-                lastClearedTime = currentTime;
-                
-                score += calculateComboScore(comboCount, clearedLines);
-                showComboDisplay(comboCount);
-                maxCombo = Math.max(maxCombo, comboCount);
-            }
-            
-            return cleared;
-        }
-
         function findConnectedComponents(color) {
             const visited = new Set();
             const components = [];
@@ -233,6 +226,56 @@
             sandParticles = sandParticles.filter(p => !component.has(`${p.x},${p.y}`));
         }
 
+        function calculateComboScore(combo, lines) {
+            const baseScore = lines * 100;
+            const baseMultiplier = 1.5;
+            let multiplier = Math.pow(baseMultiplier, combo - 1);
+            return Math.floor(baseScore * multiplier);
+        }
+
+        function showComboDisplay(combo) {
+            if (combo < 2) return;
+            const multiplier = Math.pow(1.5, combo - 1).toFixed(2);
+            comboDisplayElement.textContent = `${combo} コンボ! (x${multiplier})`;
+            comboDisplayElement.style.display = 'block';
+            clearTimeout(comboDisplayTimeout);
+            comboDisplayTimeout = setTimeout(() => {
+                comboDisplayElement.style.display = 'none';
+            }, 2000);
+        }
+
+        function checkAndClearLines() {
+            let cleared = false;
+            let clearedLines = 0;
+            for (let color = 0; color < colors.length; color++) {
+                const connectedComponents = findConnectedComponents(color);
+                for (const component of connectedComponents) {
+                    if (isFullWidth(component)) {
+                        removeSandParticles(component);
+                        cleared = true;
+                        clearedLines++;
+                    }
+                }
+            }
+            
+            const currentTime = Date.now();
+            if (cleared) {
+                if (currentTime - lastClearedTime < comboTimeThreshold) {
+                    comboCount++;
+                } else {
+                    comboCount = 1;
+                }
+                lastClearedTime = currentTime;
+                
+                const comboScore = calculateComboScore(comboCount, clearedLines);
+                score += comboScore;
+                showComboDisplay(comboCount);
+                maxCombo = Math.max(maxCombo, comboCount);
+            }
+            
+            return cleared;
+        }
+
         function simulateSand() {
             let moved = false;
             sandParticles.sort((a, b) => b.y - a.y);
@@ -261,24 +304,8 @@
             return moved;
         }
 
-        function calculateComboScore(combo, lines) {
-            const baseScore = lines * 100;
-            let multiplier = 1 + (combo - 1) * 0.5;
-            return Math.floor(baseScore * multiplier);
-        }
-
-        function showComboDisplay(combo) {
-            if (combo < 2) return;
-            comboDisplayElement.textContent = `${combo} コンボ!`;
-            comboDisplayElement.style.display = 'block';
-            clearTimeout(comboDisplayTimeout);
-            comboDisplayTimeout = setTimeout(() => {
-                comboDisplayElement.style.display = 'none';
-            }, 2000);
-        }
-
         function updateScoreDisplay() {
-            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}`;
+            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x`;
         }
 
         function gameOver() {
@@ -325,7 +352,7 @@
             update();
         }
 
-        function update() {
+       function update() {
             if (gameState !== 'playing') return;
 
             frameCount++;
