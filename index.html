@@ -60,7 +60,7 @@
 </head>
 <body>
     <div id="gameContainer">
-        <div id="scoreDisplay">スコア: 0 最高コンボ: 0</div>
+        <div id="scoreDisplay">スコア: 0 最高コンボ: 0 速度: 1.00x</div>
         <canvas id="gameCanvas"></canvas>
         <div id="comboDisplay"></div>
     </div>
@@ -84,6 +84,9 @@
         ];
         const NEXT_PIECE_PADDING = 10;
         const NEXT_PIECE_LABEL = 'NEXT';
+        const SPEED_INCREASE_RATE = 0.99;
+        const SPEED_INCREASE_INTERVAL = 5;
+        const comboTimeThreshold = 1000;
 
         let cellSize, sandSize;
         let sandParticles = [];
@@ -103,12 +106,13 @@
         let touchStartTime = 0;
         let isTouchHolding = false;
         let lastClearedTime = 0;
-        const comboTimeThreshold = 1000;
+        let fallSpeed = 30;
+        let totalRows = 0;
 
         function resizeCanvas() {
             const containerWidth = window.innerWidth;
-            const containerHeight = window.innerHeight - 30; // スコア表示の高さを引く
-            const nextPieceWidth = Math.ceil(gridWidth * 0.4); // ネクストピース領域の幅をメインエリアの40%に設定
+            const containerHeight = window.innerHeight - 30;
+            const nextPieceWidth = Math.ceil(gridWidth * 0.4);
             const aspectRatio = (gridWidth + nextPieceWidth) / gridHeight;
             let newWidth, newHeight;
 
@@ -125,14 +129,12 @@
             canvas.width = cellSize * (gridWidth + nextPieceWidth);
             canvas.height = cellSize * gridHeight;
 
-            // キャンバスのスタイルを設定
             canvas.style.width = `${canvas.width}px`;
             canvas.style.height = `${canvas.height}px`;
 
-            // キャンバスを中央に配置
             canvas.style.position = 'absolute';
             canvas.style.left = `${(containerWidth - canvas.width) / 2}px`;
-            canvas.style.top = `${((containerHeight - canvas.height) / 2) + 30}px`; // スコア表示の高さを考慮
+            canvas.style.top = `${((containerHeight - canvas.height) / 2) + 30}px`;
         }
 
         function createPiece() {
@@ -149,7 +151,6 @@
         function drawGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // プレイエリアの背景を描画
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, cellSize * gridWidth, canvas.height);
 
@@ -175,13 +176,11 @@
             const nextPieceAreaWidth = canvas.width - cellSize * gridWidth;
             const nextPieceSize = Math.min(cellSize * 0.8, (nextPieceAreaWidth - NEXT_PIECE_PADDING * 2) / 4);
             const nextPieceX = cellSize * gridWidth + (nextPieceAreaWidth - nextPieceSize * 4) / 2;
-            const nextPieceY = NEXT_PIECE_PADDING * 3 + 20; // ラベルの高さ分を追加
+            const nextPieceY = NEXT_PIECE_PADDING * 2 + 20;
 
-            // 背景を描画
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(cellSize * gridWidth, 0, nextPieceAreaWidth, canvas.height);
 
-            // 境界線を描画
             ctx.strokeStyle = 'white';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -189,17 +188,14 @@
             ctx.lineTo(cellSize * gridWidth, canvas.height);
             ctx.stroke();
 
-            // "NEXT"ラベルを描画
             ctx.fillStyle = 'white';
             ctx.font = '20px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText(NEXT_PIECE_LABEL, cellSize * gridWidth + nextPieceAreaWidth / 2, NEXT_PIECE_PADDING * 2);
+            ctx.fillText(NEXT_PIECE_LABEL, cellSize * gridWidth + nextPieceAreaWidth / 2, NEXT_PIECE_PADDING + 20);
 
-            // ネクストピースの背景を描画
             ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.fillRect(nextPieceX, nextPieceY, nextPieceSize * 4, nextPieceSize * 4);
 
-            // ネクストピースを描画
             ctx.fillStyle = colors[nextPiece.color];
             for (let y = 0; y < nextPiece.shape.length; y++) {
                 for (let x = 0; x < nextPiece.shape[y].length; x++) {
@@ -387,7 +383,7 @@
         }
 
         function updateScoreDisplay() {
-            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x`;
+            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x 速度: ${(30 / fallSpeed).toFixed(2)}x`;
         }
 
         function gameOver() {
@@ -430,6 +426,8 @@
             lastClearedTime = 0;
             currentPiece = createPiece();
             nextPiece = createPiece();
+            fallSpeed = 30;
+            totalRows = 0;
             updateScoreDisplay();
             gameState = 'playing';
             update();
@@ -439,9 +437,14 @@
             if (gameState !== 'playing') return;
 
             frameCount++;
-            if (frameCount % 30 === 0 && !isSettling && !isClearing && currentPiece) {
+            if (frameCount % Math.floor(fallSpeed) === 0 && !isSettling && !isClearing && currentPiece) {
                 if (canMove(0, 1)) {
                     currentPiece.y++;
+                    score++;
+                    totalRows++;
+                    if (totalRows % SPEED_INCREASE_INTERVAL === 0) {
+                        fallSpeed *= SPEED_INCREASE_RATE;
+                    }
                 } else {
                     mergePiece();
                     isSettling = true;
@@ -498,6 +501,8 @@
                 case 'drop':
                     while (canMove(0, 1)) {
                         currentPiece.y++;
+                        score++;
+                        totalRows++;
                     }
                     mergePiece();
                     break;
