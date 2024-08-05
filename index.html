@@ -111,6 +111,12 @@
         let lastClearedTime = 0;
         let fallSpeed = 30;
         let totalRows = 0;
+        let lastFrameTime = 0;
+        const targetFPS = 30;
+
+        // オフスクリーンキャンバスの作成
+        const offscreenCanvas = document.createElement('canvas');
+        const offscreenCtx = offscreenCanvas.getContext('2d');
 
         function resizeCanvas() {
             const containerWidth = window.innerWidth;
@@ -138,6 +144,10 @@
             canvas.style.position = 'absolute';
             canvas.style.left = `${(containerWidth - canvas.width) / 2}px`;
             canvas.style.top = `${((containerHeight - canvas.height) / 2) + 30}px`;
+
+            // オフスクリーンキャンバスのサイズも更新
+            offscreenCanvas.width = canvas.width;
+            offscreenCanvas.height = canvas.height;
         }
 
         function createPiece() {
@@ -152,15 +162,21 @@
         }
 
         function drawGrid() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
             
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, cellSize * gridWidth, canvas.height);
+            offscreenCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            offscreenCtx.fillRect(0, 0, cellSize * gridWidth, offscreenCanvas.height);
 
+            offscreenCtx.beginPath();
             for (const particle of sandParticles) {
-                ctx.fillStyle = colors[particle.color];
-                ctx.fillRect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
+                offscreenCtx.rect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
+                offscreenCtx.fillStyle = colors[particle.color];
+                offscreenCtx.fill();
             }
+
+            // メインキャンバスにコピー
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(offscreenCanvas, 0, 0);
         }
 
         function drawPiece() {
@@ -321,8 +337,7 @@
             comboDisplayElement.style.display = 'block';
             clearTimeout(comboDisplayTimeout);
             comboDisplayTimeout = setTimeout(() => {
-                comboDisplayElement.style.display = 'none';
-            }, 2000);
+                comboDisplayElement.style.display = 'none';}, 2000);
         }
 
         function checkAndClearLines() {
@@ -360,7 +375,9 @@
         function simulateSand() {
             let moved = false;
             sandParticles.sort((a, b) => b.y - a.y);
-            for (const particle of sandParticles) {
+            for (let i = 0; i < sandParticles.length; i++) {
+                if (Math.random() < 0.5) continue; // 50%の確率でスキップ
+                const particle = sandParticles[i];
                 if (particle.y < gridHeight * cellDivisions - 1 && !sandParticles.some(p => p.x === particle.x && p.y === particle.y + 1)) {
                     particle.y++;
                     moved = true;
@@ -436,7 +453,13 @@
             update();
         }
 
-        function update() {
+        function update(currentTime) {
+            if (currentTime - lastFrameTime < 1000 / targetFPS) {
+                gameLoop = requestAnimationFrame(update);
+                return;
+            }
+            lastFrameTime = currentTime;
+
             if (gameState !== 'playing') return;
 
             frameCount++;
