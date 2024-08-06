@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>魂テトリス</title>
+    <title>魂テトリスVer.2</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body { 
             margin: 0; 
@@ -18,7 +19,7 @@
         }
         body { 
             background-color: #f0f0f0; 
-            font-family: Arial, sans-serif; 
+            font-family: 'Noto Sans JP', Arial, sans-serif; 
         }
         #gameContainer { 
             position: absolute; 
@@ -32,7 +33,7 @@
         canvas { 
             border: 1px solid #000; 
             max-width: 100%; 
-            max-height: calc(100% - 30px); 
+            max-height: 100%; 
         }
         #scoreDisplay {
             width: 100%;
@@ -81,11 +82,89 @@
             margin: 10px;
             cursor: pointer;
         }
+        #highScoreScreen {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        #highScores {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        #highScores ol {
+            list-style-position: inside;
+            padding: 0;
+        }
+        #highScores li {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        #authorBanner {
+            width: 100%;
+            height: 60px;
+            background-color: #1a3c5a;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+        }
+        #authorBanner a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+        #bannerContent {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            max-width: 600px;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+        }
+        #bannerContent img {
+            height: 50px;
+            margin-right: 15px;
+            border: 1px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        #bookInfo {
+            flex-grow: 1;
+        }
+        #bookInfo h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        #bookInfo p {
+            margin: 2px 0 0;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        #readButton {
+            background-color: #f0c14b;
+            color: #111111;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+        .screen-with-banner {
+            height: calc(100% - 60px);
+        }
     </style>
 </head>
 <body>
     <div id="gameContainer">
-        <div id="scoreDisplay">スコア: 0 最高コンボ: 0 速度: 1.00x</div>
+        <div id="scoreDisplay">スコア: 0 最高コンボ: 0 速度: 1.00x 粒子数: 0</div>
         <canvas id="gameCanvas"></canvas>
         <div id="comboDisplay"></div>
     </div>
@@ -107,6 +186,19 @@
         <h2>ハイスコア</h2>
         <div id="highScores"></div>
         <button onclick="showStartScreen()">戻る</button>
+    </div>
+
+    <div id="authorBanner">
+        <a href="https://amzn.asia/d/e1grnLa" target="_blank" rel="noopener noreferrer" id="bannerLink">
+            <div id="bannerContent">
+                <img src="book-cover.jpg" alt="空の器 ~内なる光の旅路~">
+                <div id="bookInfo">
+                    <h3>空の器 ~内なる光の旅路~</h3>
+                    <p>ゲーム開発者が贈る、心の成長の物語</p>
+                </div>
+                <span id="readButton">今すぐ読む</span>
+            </div>
+        </a>
     </div>
 
     <script>
@@ -163,7 +255,7 @@
 
         function resizeCanvas() {
             const containerWidth = window.innerWidth;
-            const containerHeight = window.innerHeight - 30;
+            const containerHeight = window.innerHeight;
             const nextPieceWidth = Math.ceil(gridWidth * 0.4);
             const aspectRatio = (gridWidth + nextPieceWidth) / gridHeight;
             let newWidth, newHeight;
@@ -186,7 +278,7 @@
 
             canvas.style.position = 'absolute';
             canvas.style.left = `${(containerWidth - canvas.width) / 2}px`;
-            canvas.style.top = `${((containerHeight - canvas.height) / 2) + 30}px`;
+            canvas.style.top = `${(containerHeight - canvas.height) / 2}px`;
 
             offscreenCanvas.width = canvas.width;
             offscreenCanvas.height = canvas.height;
@@ -205,15 +297,12 @@
 
         function drawGrid() {
             offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-            
             offscreenCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             offscreenCtx.fillRect(0, 0, cellSize * gridWidth, offscreenCanvas.height);
 
-            offscreenCtx.beginPath();
             for (const particle of sandParticles) {
-                offscreenCtx.rect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
                 offscreenCtx.fillStyle = colors[particle.color];
-                offscreenCtx.fill();
+                offscreenCtx.fillRect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -249,7 +338,7 @@
             ctx.stroke();
 
             ctx.fillStyle = 'white';
-            ctx.font = '20px Arial';
+            ctx.font = '20px Noto Sans JP';
             ctx.textAlign = 'center';
             ctx.fillText(NEXT_PIECE_LABEL, cellSize * gridWidth + nextPieceAreaWidth / 2, NEXT_PIECE_PADDING + 20);
 
@@ -278,8 +367,15 @@
                     if (currentPiece.shape[y][x]) {
                         const newX = currentPiece.x + x + dx;
                         const newY = currentPiece.y + y + dy;
-                        if (newX < 0 || newX >= gridWidth || newY >= gridHeight || 
-                            sandParticles.some(p => Math.floor(p.x / cellDivisions) === newX && Math.floor(p.y / cellDivisions) === newY)) {
+                        if (newX < 0 || newX >= gridWidth || newY >= gridHeight) {
+                            return false;
+                        }
+                        const checkX = newX * cellDivisions;
+                        const checkY = newY * cellDivisions;
+                        if (sandParticles.some(p => 
+                            p.x >= checkX && p.x < checkX + cellDivisions &&
+                            p.y >= checkY && p.y < checkY + cellDivisions
+                        )) {
                             return false;
                         }
                     }
@@ -303,12 +399,16 @@
             for (let y = 0; y < currentPiece.shape.length; y++) {
                 for (let x = 0; x < currentPiece.shape[y].length; x++) {
                     if (currentPiece.shape[y][x]) {
+                        const pieceX = (currentPiece.x + x) * cellDivisions;
+                        const pieceY = (currentPiece.y + y) * cellDivisions;
                         for (let i = 0; i < cellDivisions; i++) {
                             for (let j = 0; j < cellDivisions; j++) {
+                                const newY = pieceY + j;
                                 sandParticles.push({
-                                    x: (currentPiece.x + x) * cellDivisions + i,
-                                    y: (currentPiece.y + y) * cellDivisions + j,
-                                    color: currentPiece.color
+                                    x: pieceX + i,
+                                    y: newY,
+                                    color: currentPiece.color,
+                                    fixed: false
                                 });
                             }
                         }
@@ -366,14 +466,29 @@
 
         function calculateComboScore(combo, lines) {
             const baseScore = lines * 100;
-            const baseMultiplier = 1.5;
-            let multiplier = Math.pow(baseMultiplier, combo - 1);
+            let multiplier;
+
+            if (combo <= 1) {
+                multiplier = 1;
+            } else if (combo === 2) {
+                multiplier = 2;
+            } else {
+                const baseMultiplier = 1.8;
+                multiplier = Math.pow(baseMultiplier, combo - 2);
+            }
+
             return Math.floor(baseScore * multiplier);
         }
 
         function showComboDisplay(combo) {
             if (combo < 2) return;
-            const multiplier = Math.pow(1.5, combo - 1).toFixed(2);
+            let multiplier;
+            if (combo === 2) {
+                multiplier = "2.00";
+            } else {
+                const baseMultiplier = 1.8;
+                multiplier = Math.pow(baseMultiplier, combo - 2).toFixed(2);
+            }
             comboDisplayElement.textContent = `${combo} コンボ! (x${multiplier})`;
             comboDisplayElement.style.display = 'block';
             clearTimeout(comboDisplayTimeout);
@@ -418,34 +533,63 @@
             let moved = false;
             sandParticles.sort((a, b) => b.y - a.y);
             for (let i = 0; i < sandParticles.length; i++) {
-                if (Math.random() < 0.5) continue; // 50%の確率でスキップ
                 const particle = sandParticles[i];
-                if (particle.y < gridHeight * cellDivisions - 1 && !sandParticles.some(p => p.x === particle.x && p.y === particle.y + 1)) {
-                    particle.y++;
-                    moved = true;
-                } else if (particle.y < gridHeight * cellDivisions - 1) {
-                    const leftClear = particle.x > 0 && !sandParticles.some(p => p.x === particle.x - 1 && p.y === particle.y + 1);
-                    const rightClear = particle.x < gridWidth * cellDivisions - 1 && !sandParticles.some(p => p.x === particle.x + 1 && p.y === particle.y + 1);
-                    if (leftClear && rightClear) {
-                        particle.x += Math.random() < 0.5 ? -1 : 1;
-                        particle.y++;
-                        moved = true;
-                    } else if (leftClear) {
-                        particle.x--;
-                        particle.y++;
-                        moved = true;
-                    } else if (rightClear) {
-                        particle.x++;
-                        particle.y++;
-                        moved = true;
+                if (particle.fixed) {
+                    if (particle.y < gridHeight * cellDivisions - 1 && !isOccupied(particle.x, particle.y + 1)) {
+                        particle.fixed = false;
+                    } else {
+                        continue;
                     }
+                }
+
+                const newY = particle.y + 1;
+                if (newY < gridHeight * cellDivisions && !isOccupied(particle.x, newY)) {
+                    particle.y = newY;
+                    moved = true;
+                } else {
+                    const leftX = particle.x - 1;
+                    const rightX = particle.x + 1;
+                    const canMoveLeft = leftX >= 0 && !isOccupied(leftX, newY);
+                    const canMoveRight = rightX < gridWidth * cellDivisions && !isOccupied(rightX, newY);
+
+                    if (canMoveLeft && canMoveRight) {
+                        particle.x += Math.random() < 0.5 ? -1 : 1;
+                        particle.y = newY;
+                        moved = true;
+                    } else if (canMoveLeft) {
+                        particle.x = leftX;
+                        particle.y = newY;
+                        moved = true;
+                    } else if (canMoveRight) {
+                        particle.x = rightX;
+                        particle.y = newY;
+                        moved = true;
+                    } else {
+                        particle.fixed = true;
+                    }
+                }
+
+                if (particle.y >= gridHeight * cellDivisions - 1) {
+                    particle.y = gridHeight * cellDivisions - 1;
+                    particle.fixed = true;
                 }
             }
             return moved;
         }
 
+        function isOccupied(x, y) {
+            return sandParticles.some(p => p.x === x && p.y === y);
+        }
+
         function updateScoreDisplay() {
-            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x 速度: ${(30 / fallSpeed).toFixed(2)}x`;
+            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x 速度: ${(30 / fallSpeed).toFixed(2)}x 粒子数: ${sandParticles.length}`;
+        }
+
+        function removeOutOfBoundParticles() {
+            sandParticles = sandParticles.filter(p => 
+                p.x >= 0 && p.x < gridWidth * cellDivisions && 
+                p.y >= 0 && p.y < gridHeight * cellDivisions
+            );
         }
 
         function showScreen(screenId) {
@@ -453,6 +597,16 @@
                 screen.style.display = 'none';
             });
             document.getElementById(screenId).style.display = 'block';
+            
+            // バナーの表示/非表示を切り替え
+            const authorBanner = document.getElementById('authorBanner');
+            if (screenId === 'gameContainer') {
+                authorBanner.style.display = 'none';
+                document.getElementById('gameContainer').classList.remove('screen-with-banner');
+            } else {
+                authorBanner.style.display = 'flex';
+                document.getElementById(screenId).classList.add('screen-with-banner');
+            }
         }
 
         function showStartScreen() {
@@ -503,6 +657,11 @@
             update();
         }
 
+        function checkGameOver() {
+            if (!currentPiece) return false;
+            return !canMove(0, 0);
+        }
+
         function update(currentTime) {
             if (currentTime - lastFrameTime < 1000 / targetFPS) {
                 gameLoop = requestAnimationFrame(update);
@@ -512,15 +671,15 @@
 
             if (gameState !== 'playing') return;
 
+            if (checkGameOver()) {
+                gameOver();
+                return;
+            }
+
             frameCount++;
             if (frameCount % Math.floor(fallSpeed) === 0 && !isSettling && !isClearing && currentPiece) {
                 if (canMove(0, 1)) {
                     currentPiece.y++;
-                    score++;
-                    totalRows++;
-                    if (totalRows % SPEED_INCREASE_INTERVAL === 0) {
-                        fallSpeed *= SPEED_INCREASE_RATE;
-                    }
                 } else {
                     mergePiece();
                     isSettling = true;
@@ -543,12 +702,12 @@
                     if (!currentPiece) {
                         currentPiece = nextPiece;
                         nextPiece = createPiece();
-                        if (!canMove(0, 0)) {
-                            gameOver();
-                            return;
-                        }
                     }
                 }
+            }
+
+            if (frameCount % 100 === 0) {
+                removeOutOfBoundParticles();
             }
 
             drawGrid();
@@ -577,8 +736,6 @@
                 case 'drop':
                     while (canMove(0, 1)) {
                         currentPiece.y++;
-                        score++;
-                        totalRows++;
                     }
                     mergePiece();
                     break;
@@ -672,11 +829,13 @@
         }
 
         function displayHighScores(scores) {
-            let highScoresHtml = '<ul>';
-            scores.forEach(score => {
-                highScoresHtml += `<li>${score[0]}: ${score[1]}点</li>`;
+            let highScoresHtml = '<ol>';
+            scores.forEach((score, index) => {
+                if (index < 10) {
+                    highScoresHtml += `<li>${score[0]}: ${score[1]}点</li>`;
+                }
             });
-            highScoresHtml += '</ul>';
+            highScoresHtml += '</ol>';
             document.getElementById('highScores').innerHTML = highScoresHtml;
         }
 
@@ -687,6 +846,26 @@
         }
 
         init();
+
+        // 著者バナー関連の関数
+        const bookDescriptions = [
+            "ゲーム開発者が贈る、心の成長の物語",
+            "内なる光を見つける旅に出よう",
+            "自己発見の旅路があなたを待っています",
+            "魂の探求を描いた感動の一冊",
+            "このゲームの作者による小説です"
+        ];
+
+        function changeBookDescription() {
+            const descElement = document.querySelector('#bookInfo p');
+            let newDesc = bookDescriptions[Math.floor(Math.random() * bookDescriptions.length)];
+            while (newDesc === descElement.textContent) {
+                newDesc = bookDescriptions[Math.floor(Math.random() * bookDescriptions.length)];
+            }
+            descElement.textContent = newDesc;
+        }
+
+        setInterval(changeBookDescription, 10000);
     </script>
     <script>
         if ('serviceWorker' in navigator) {
