@@ -1,884 +1,116 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>魂テトリスVer.2</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: hidden; 
-            position: fixed;
-        }
-        body { 
-            background-color: #f0f0f0; 
-            font-family: 'Noto Sans JP', Arial, sans-serif; 
-        }
-        #gameContainer { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-start;
-            align-items: center; 
-        }
-        canvas { 
-            border: 1px solid #000; 
-            max-width: 100%; 
-            max-height: 100%; 
-        }
-        #scoreDisplay {
-            width: 100%;
-            height: 30px;
-            font-size: 14px;
-            color: white;
-            text-shadow: 1px 1px 2px black;
-            line-height: 30px;
-            background-color: rgba(0, 0, 0, 0.5);
-            text-align: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-        }
-        #comboDisplay { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            font-size: 24px;
-            color: white; 
-            text-shadow: 2px 2px 4px black; 
-            display: none; 
-            z-index: 20;
-        }
-        .screen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            text-align: center;
-            padding-top: 20%;
-        }
-        .screen h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .screen button {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-        }
-        #highScoreScreen {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        #highScores {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        #highScores ol {
-            list-style-position: inside;
-            padding: 0;
-        }
-        #highScores li {
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        #authorBanner {
-            width: 100%;
-            height: 60px;
-            background-color: #1a3c5a;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            color: #ffffff;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            overflow: hidden;
-        }
-        #authorBanner a {
-            display: block;
-            width: 100%;
-            height: 100%;
-            text-decoration: none;
-            color: inherit;
-        }
-        #bannerContent {
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            max-width: 600px;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-        }
-        #bannerContent img {
-            height: 50px;
-            margin-right: 15px;
-            border: 1px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        #bookInfo {
-            flex-grow: 1;
-        }
-        #bookInfo h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        #bookInfo p {
-            margin: 2px 0 0;
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        #readButton {
-            background-color: #f0c14b;
-            color: #111111;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-left: 15px;
-        }
-        .screen-with-banner {
-            height: calc(100% - 60px);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>魂テトリス</title>
+<link rel="manifest" href="m.json">
+<meta name="theme-color" content="#000">
+<link rel="apple-touch-icon" href="i.png">
+<style>
+body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;position:fixed;font-family:sans-serif}
+#g{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;align-items:center}
+canvas{border:1px solid #000;max-width:100%;max-height:100%}
+#s{width:100%;height:30px;font-size:14px;color:#fff;text-shadow:1px 1px 2px #000;line-height:30px;background:rgba(0,0,0,.5);text-align:center;position:absolute;top:0;left:0;z-index:10}
+#c{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px;color:#fff;text-shadow:2px 2px 4px #000;display:none;z-index:20}
+.r{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);color:#fff;text-align:center;padding-top:20%}
+.r h2{font-size:24px;margin-bottom:20px}
+.r button{font-size:18px;padding:10px 20px;margin:10px;cursor:pointer}
+#h{display:flex;flex-direction:column;height:100%}
+#l{flex-grow:1;overflow-y:auto;padding:10px}
+#l ol{list-style-position:inside;padding:0}
+#l li{margin-bottom:5px;font-size:18px}
+#a{width:100%;height:60px;background:#1a3c5a;display:none;justify-content:center;align-items:center;color:#fff;position:fixed;bottom:0;left:0;overflow:hidden}
+#a a{display:block;width:100%;height:100%;text-decoration:none;color:inherit}
+#b{display:flex;align-items:center;padding:0 10px;max-width:600px;width:100%;height:100%;margin:0 auto}
+#b img{height:50px;margin-right:15px;border:1px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+#i{flex-grow:1}
+#i h3{margin:0;font-size:16px;font-weight:700}
+#i p{margin:2px 0 0;font-size:12px;opacity:.9}
+#d{background:#f0c14b;color:#111;padding:5px 10px;border-radius:3px;font-size:14px;font-weight:700;margin-left:15px}
+.w{height:calc(100% - 60px)}
+</style>
 </head>
 <body>
-    <div id="gameContainer">
-        <div id="scoreDisplay">スコア: 0 最高コンボ: 0 速度: 1.00x 粒子数: 0</div>
-        <canvas id="gameCanvas"></canvas>
-        <div id="comboDisplay"></div>
-    </div>
-
-    <div id="startScreen" class="screen">
-        <h2>魂テトリス</h2>
-        <button onclick="startGame()">ゲームスタート</button>
-        <button onclick="showHighScores()">ハイスコア</button>
-    </div>
-
-    <div id="gameOverScreen" class="screen">
-        <h2>ゲームオーバー</h2>
-        <p>スコア: <span id="finalScore"></span></p>
-        <button onclick="restartGame()">もう一度プレイ</button>
-        <button onclick="showHighScores()">ハイスコア</button>
-    </div>
-
-    <div id="highScoreScreen" class="screen">
-        <h2>ハイスコア</h2>
-        <div id="highScores"></div>
-        <button onclick="showStartScreen()">戻る</button>
-    </div>
-
-    <div id="authorBanner">
-        <a href="https://amzn.asia/d/e1grnLa" target="_blank" rel="noopener noreferrer" id="bannerLink">
-            <div id="bannerContent">
-                <img src="book-cover.jpg" alt="空の器 ~内なる光の旅路~">
-                <div id="bookInfo">
-                    <h3>空の器 ~内なる光の旅路~</h3>
-                    <p>ゲーム開発者が贈る、心の成長の物語</p>
-                </div>
-                <span id="readButton">今すぐ読む</span>
-            </div>
-        </a>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplayElement = document.getElementById('scoreDisplay');
-        const comboDisplayElement = document.getElementById('comboDisplay');
-        const gridWidth = 10;
-        const gridHeight = 20;
-        const cellDivisions = 5;
-        const colors = ['#FF0000', '#0000FF', '#00FF00', '#FFFF00'];
-        const pieces = [
-            [[1,1,1,1]],
-            [[1,1],[1,1]],
-            [[1,1,1],[0,1,0]],
-            [[1,1,1],[1,0,0]],
-            [[1,1,1],[0,0,1]],
-            [[1,1,0],[0,1,1]],
-            [[0,1,1],[1,1,0]]
-        ];
-        const NEXT_PIECE_PADDING = 10;
-        const NEXT_PIECE_LABEL = 'NEXT';
-        const SPEED_INCREASE_RATE = 0.99;
-        const SPEED_INCREASE_INTERVAL = 5;
-        const comboTimeThreshold = 1000;
-
-        let cellSize, sandSize;
-        let sandParticles = [];
-        let currentPiece;
-        let nextPiece;
-        let score = 0;
-        let gameLoop;
-        let frameCount = 0;
-        let isSettling = false;
-        let isClearing = false;
-        let comboCount = 0;
-        let maxCombo = 0;
-        let gameState = 'start';
-        let comboDisplayTimeout;
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchStartTime = 0;
-        let isTouchHolding = false;
-        let lastClearedTime = 0;
-        let fallSpeed = 30;
-        let totalRows = 0;
-        let lastFrameTime = 0;
-        const targetFPS = 30;
-
-        const offscreenCanvas = document.createElement('canvas');
-        const offscreenCtx = offscreenCanvas.getContext('2d');
-
-        const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxLXVi5Fwztc0lar7eNA1cenpiygIKr-_dWliDYq0pAx7EDFhmP0YfaVZkRGqqAs2zndA/exec';
-
-        function resizeCanvas() {
-            const containerWidth = window.innerWidth;
-            const containerHeight = window.innerHeight;
-            const nextPieceWidth = Math.ceil(gridWidth * 0.4);
-            const aspectRatio = (gridWidth + nextPieceWidth) / gridHeight;
-            let newWidth, newHeight;
-
-            if (containerWidth / containerHeight > aspectRatio) {
-                newHeight = containerHeight;
-                newWidth = newHeight * aspectRatio;
-            } else {
-                newWidth = containerWidth;
-                newHeight = newWidth / aspectRatio;
-            }
-
-            cellSize = Math.floor(Math.min(newWidth / (gridWidth + nextPieceWidth), newHeight / gridHeight));
-            sandSize = cellSize / cellDivisions;
-            canvas.width = cellSize * (gridWidth + nextPieceWidth);
-            canvas.height = cellSize * gridHeight;
-
-            canvas.style.width = `${canvas.width}px`;
-            canvas.style.height = `${canvas.height}px`;
-
-            canvas.style.position = 'absolute';
-            canvas.style.left = `${(containerWidth - canvas.width) / 2}px`;
-            canvas.style.top = `${(containerHeight - canvas.height) / 2}px`;
-
-            offscreenCanvas.width = canvas.width;
-            offscreenCanvas.height = canvas.height;
-        }
-
-        function createPiece() {
-            const pieceType = Math.floor(Math.random() * pieces.length);
-            const colorIndex = Math.floor(Math.random() * colors.length);
-            return {
-                shape: pieces[pieceType],
-                color: colorIndex,
-                x: Math.floor(gridWidth / 2) - Math.floor(pieces[pieceType][0].length / 2),
-                y: 0
-            };
-        }
-
-        function drawGrid() {
-            offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-            offscreenCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            offscreenCtx.fillRect(0, 0, cellSize * gridWidth, offscreenCanvas.height);
-
-            for (const particle of sandParticles) {
-                offscreenCtx.fillStyle = colors[particle.color];
-                offscreenCtx.fillRect(particle.x * sandSize, particle.y * sandSize, sandSize, sandSize);
-            }
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(offscreenCanvas, 0, 0);
-        }
-
-        function drawPiece() {
-            if (!currentPiece) return;
-            ctx.fillStyle = colors[currentPiece.color];
-            for (let y = 0; y < currentPiece.shape.length; y++) {
-                for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                    if (currentPiece.shape[y][x]) {
-                        ctx.fillRect((currentPiece.x + x) * cellSize, (currentPiece.y + y) * cellSize, cellSize - 1, cellSize - 1);
-                    }
-                }
-            }
-        }
-
-        function drawNextPiece() {
-            const nextPieceAreaWidth = canvas.width - cellSize * gridWidth;
-            const nextPieceSize = Math.min(cellSize * 0.8, (nextPieceAreaWidth - NEXT_PIECE_PADDING * 2) / 4);
-            const nextPieceX = cellSize * gridWidth + (nextPieceAreaWidth - nextPieceSize * 4) / 2;
-            const nextPieceY = NEXT_PIECE_PADDING * 2 + 20;
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(cellSize * gridWidth, 0, nextPieceAreaWidth, canvas.height);
-
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(cellSize * gridWidth, 0);
-            ctx.lineTo(cellSize * gridWidth, canvas.height);
-            ctx.stroke();
-
-            ctx.fillStyle = 'white';
-            ctx.font = '20px Noto Sans JP';
-            ctx.textAlign = 'center';
-            ctx.fillText(NEXT_PIECE_LABEL, cellSize * gridWidth + nextPieceAreaWidth / 2, NEXT_PIECE_PADDING + 20);
-
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fillRect(nextPieceX, nextPieceY, nextPieceSize * 4, nextPieceSize * 4);
-
-            ctx.fillStyle = colors[nextPiece.color];
-            for (let y = 0; y < nextPiece.shape.length; y++) {
-                for (let x = 0; x < nextPiece.shape[y].length; x++) {
-                    if (nextPiece.shape[y][x]) {
-                        ctx.fillRect(
-                            nextPieceX + (x + (4 - nextPiece.shape[y].length) / 2) * nextPieceSize,
-                            nextPieceY + (y + (4 - nextPiece.shape.length) / 2) * nextPieceSize,
-                            nextPieceSize - 1,
-                            nextPieceSize - 1
-                        );
-                    }
-                }
-            }
-        }
-
-        function canMove(dx, dy) {
-            if (!currentPiece) return false;
-            for (let y = 0; y < currentPiece.shape.length; y++) {
-                for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                    if (currentPiece.shape[y][x]) {
-                        const newX = currentPiece.x + x + dx;
-                        const newY = currentPiece.y + y + dy;
-                        if (newX < 0 || newX >= gridWidth || newY >= gridHeight) {
-                            return false;
-                        }
-                        const checkX = newX * cellDivisions;
-                        const checkY = newY * cellDivisions;
-                        if (sandParticles.some(p => 
-                            p.x >= checkX && p.x < checkX + cellDivisions &&
-                            p.y >= checkY && p.y < checkY + cellDivisions
-                        )) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
-        function rotate() {
-            if (!currentPiece) return;
-            const rotated = currentPiece.shape[0].map((_, i) => currentPiece.shape.map(row => row[i]).reverse());
-            const previousShape = currentPiece.shape;
-            currentPiece.shape = rotated;
-            if (!canMove(0, 0)) {
-                currentPiece.shape = previousShape;
-            }
-        }
-
-        function mergePiece() {
-            if (!currentPiece) return;
-            for (let y = 0; y < currentPiece.shape.length; y++) {
-                for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                    if (currentPiece.shape[y][x]) {
-                        const pieceX = (currentPiece.x + x) * cellDivisions;
-                        const pieceY = (currentPiece.y + y) * cellDivisions;
-                        for (let i = 0; i < cellDivisions; i++) {
-                            for (let j = 0; j < cellDivisions; j++) {
-                                const newY = pieceY + j;
-                                sandParticles.push({
-                                    x: pieceX + i,
-                                    y: newY,
-                                    color: currentPiece.color,
-                                    fixed: false
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            currentPiece = null;
-            isSettling = true;
-        }
-
-        function findConnectedComponents(color) {
-            const visited = new Set();
-            const components = [];
-            for (const particle of sandParticles) {
-                if (particle.color === color && !visited.has(`${particle.x},${particle.y}`)) {
-                    const component = new Set();
-                    dfs(particle, color, visited, component);
-                    components.push(component);
-                }
-            }
-            return components;
-        }
-
-        function dfs(particle, color, visited, component) {
-            const key = `${particle.x},${particle.y}`;
-            if (visited.has(key)) return;
-            visited.add(key);
-            component.add(key);
-
-            const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-            for (const [dx, dy] of directions) {
-                const newX = particle.x + dx;
-                const newY = particle.y + dy;
-                const neighbor = sandParticles.find(p => p.x === newX && p.y === newY && p.color === color);
-                if (neighbor) {
-                    dfs(neighbor, color, visited, component);
-                }
-            }
-        }
-
-        function isFullWidth(component) {
-            let minX = gridWidth * cellDivisions;
-            let maxX = 0;
-            for (const key of component) {
-                const [x, _] = key.split(',').map(Number);
-                minX = Math.min(minX, x);
-                maxX = Math.max(maxX, x);
-            }
-            return maxX - minX + 1 === gridWidth * cellDivisions;
-        }
-
-        function removeSandParticles(component) {
-            sandParticles = sandParticles.filter(p => !component.has(`${p.x},${p.y}`));
-        }
-
-        function calculateComboScore(combo, lines) {
-            const baseScore = lines * 100;
-            let multiplier;
-
-            if (combo <= 1) {
-                multiplier = 1;
-            } else if (combo === 2) {
-                multiplier = 2;
-            } else {
-                const baseMultiplier = 1.8;
-                multiplier = Math.pow(baseMultiplier, combo - 2);
-            }
-
-            return Math.floor(baseScore * multiplier);
-        }
-
-        function showComboDisplay(combo) {
-            if (combo < 2) return;
-            let multiplier;
-            if (combo === 2) {
-                multiplier = "2.00";
-            } else {
-                const baseMultiplier = 1.8;
-                multiplier = Math.pow(baseMultiplier, combo - 2).toFixed(2);
-            }
-            comboDisplayElement.textContent = `${combo} コンボ! (x${multiplier})`;
-            comboDisplayElement.style.display = 'block';
-            clearTimeout(comboDisplayTimeout);
-            comboDisplayTimeout = setTimeout(() => {
-                comboDisplayElement.style.display = 'none';
-            }, 2000);
-        }
-
-        function checkAndClearLines() {
-            let cleared = false;
-            let clearedLines = 0;
-            for (let color = 0; color < colors.length; color++) {
-                const connectedComponents = findConnectedComponents(color);
-                for (const component of connectedComponents) {
-                    if (isFullWidth(component)) {
-                        removeSandParticles(component);
-                        cleared = true;
-                        clearedLines++;
-                    }
-                }
-            }
-            
-            const currentTime = Date.now();
-            if (cleared) {
-                if (currentTime - lastClearedTime < comboTimeThreshold) {
-                    comboCount++;
-                } else {
-                    comboCount = 1;
-                }
-                lastClearedTime = currentTime;
-                
-                const comboScore = calculateComboScore(comboCount, clearedLines);
-                score += comboScore;
-                showComboDisplay(comboCount);
-                maxCombo = Math.max(maxCombo, comboCount);
-            }
-            
-            return cleared;
-        }
-
-        function simulateSand() {
-            let moved = false;
-            sandParticles.sort((a, b) => b.y - a.y);
-            for (let i = 0; i < sandParticles.length; i++) {
-                const particle = sandParticles[i];
-                if (particle.fixed) {
-                    if (particle.y < gridHeight * cellDivisions - 1 && !isOccupied(particle.x, particle.y + 1)) {
-                        particle.fixed = false;
-                    } else {
-                        continue;
-                    }
-                }
-
-                const newY = particle.y + 1;
-                if (newY < gridHeight * cellDivisions && !isOccupied(particle.x, newY)) {
-                    particle.y = newY;
-                    moved = true;
-                } else {
-                    const leftX = particle.x - 1;
-                    const rightX = particle.x + 1;
-                    const canMoveLeft = leftX >= 0 && !isOccupied(leftX, newY);
-                    const canMoveRight = rightX < gridWidth * cellDivisions && !isOccupied(rightX, newY);
-
-                    if (canMoveLeft && canMoveRight) {
-                        particle.x += Math.random() < 0.5 ? -1 : 1;
-                        particle.y = newY;
-                        moved = true;
-                    } else if (canMoveLeft) {
-                        particle.x = leftX;
-                        particle.y = newY;
-                        moved = true;
-                    } else if (canMoveRight) {
-                        particle.x = rightX;
-                        particle.y = newY;
-                        moved = true;
-                    } else {
-                        particle.fixed = true;
-                    }
-                }
-
-                if (particle.y >= gridHeight * cellDivisions - 1) {
-                    particle.y = gridHeight * cellDivisions - 1;
-                    particle.fixed = true;
-                }
-            }
-            return moved;
-        }
-
-        function isOccupied(x, y) {
-            return sandParticles.some(p => p.x === x && p.y === y);
-        }
-
-        function updateScoreDisplay() {
-            scoreDisplayElement.textContent = `スコア: ${score} 最高コンボ: ${maxCombo}x 速度: ${(30 / fallSpeed).toFixed(2)}x 粒子数: ${sandParticles.length}`;
-        }
-
-        function removeOutOfBoundParticles() {
-            sandParticles = sandParticles.filter(p => 
-                p.x >= 0 && p.x < gridWidth * cellDivisions && 
-                p.y >= 0 && p.y < gridHeight * cellDivisions
-            );
-        }
-
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.style.display = 'none';
-            });
-            document.getElementById(screenId).style.display = 'block';
-            
-            // バナーの表示/非表示を切り替え
-            const authorBanner = document.getElementById('authorBanner');
-            if (screenId === 'gameContainer') {
-                authorBanner.style.display = 'none';
-                document.getElementById('gameContainer').classList.remove('screen-with-banner');
-            } else {
-                authorBanner.style.display = 'flex';
-                document.getElementById(screenId).classList.add('screen-with-banner');
-            }
-        }
-
-        function showStartScreen() {
-            showScreen('startScreen');
-        }
-
-        function startGame() {
-            showScreen('gameContainer');
-            resetGame();
-        }
-
-        function gameOver() {
-            gameState = 'gameOver';
-            cancelAnimationFrame(gameLoop);
-            document.getElementById('finalScore').textContent = score;
-            showScreen('gameOverScreen');
-            let playerName = prompt("あなたの名前を入力してください：");
-            if (playerName) {
-                submitScore(playerName, score);
-            }
-        }
-
-        function restartGame() {
-            resetGame();
-            startGame();
-        }
-
-        function showHighScores() {
-            showScreen('highScoreScreen');
-            getHighScores();
-        }
-
-        function resetGame() {
-            sandParticles = [];
-            score = 0;
-            comboCount = 0;
-            maxCombo = 0;
-            isSettling = false;
-            isClearing = false;
-            frameCount = 0;
-            lastClearedTime = 0;
-            currentPiece = createPiece();
-            nextPiece = createPiece();
-            fallSpeed = 30;
-            totalRows = 0;
-            updateScoreDisplay();
-            gameState = 'playing';
-            update();
-        }
-
-        function checkGameOver() {
-            if (!currentPiece) return false;
-            return !canMove(0, 0);
-        }
-
-        function update(currentTime) {
-            if (currentTime - lastFrameTime < 1000 / targetFPS) {
-                gameLoop = requestAnimationFrame(update);
-                return;
-            }
-            lastFrameTime = currentTime;
-
-            if (gameState !== 'playing') return;
-
-            if (checkGameOver()) {
-                gameOver();
-                return;
-            }
-
-            frameCount++;
-            if (frameCount % Math.floor(fallSpeed) === 0 && !isSettling && !isClearing && currentPiece) {
-                if (canMove(0, 1)) {
-                    currentPiece.y++;
-                } else {
-                    mergePiece();
-                    isSettling = true;
-                }
-            }
-
-            if (isSettling) {
-                if (!simulateSand()) {
-                    isSettling = false;
-                    isClearing = true;
-                }
-            }
-
-            if (isClearing) {
-                const cleared = checkAndClearLines();
-                if (cleared) {
-                    isSettling = true;
-                } else {
-                    isClearing = false;
-                    if (!currentPiece) {
-                        currentPiece = nextPiece;
-                        nextPiece = createPiece();
-                    }
-                }
-            }
-
-            if (frameCount % 100 === 0) {
-                removeOutOfBoundParticles();
-            }
-
-            drawGrid();
-            if (currentPiece && !isSettling && !isClearing) {
-                drawPiece();
-            }
-            drawNextPiece();
-
-            updateScoreDisplay();
-            gameLoop = requestAnimationFrame(update);
-        }
-
-        function handleTouch(action) {
-            if (gameState !== 'playing') return;
-
-            switch (action) {
-                case 'left':
-                    if (canMove(-1, 0)) currentPiece.x--;
-                    break;
-                case 'right':
-                    if (canMove(1, 0)) currentPiece.x++;
-                    break;
-                case 'rotate':
-                    rotate();
-                    break;
-                case 'drop':
-                    while (canMove(0, 1)) {
-                        currentPiece.y++;
-                    }
-                    mergePiece();
-                    break;
-            }
-        }
-
-        function initEventListeners() {
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
-                touchStartTime = Date.now();
-                isTouchHolding = true;
-            });
-
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if (gameState !== 'playing') return;
-
-                const touch = e.touches[0];
-                const deltaX = touch.clientX - touchStartX;
-                const deltaY = touch.clientY - touchStartY;
-
-                if (Math.abs(deltaX) > cellSize) {
-                    handleTouch(deltaX > 0 ? 'right' : 'left');
-                    touchStartX = touch.clientX;
-                }
-
-                if (deltaY > cellSize && isTouchHolding) {
-                    handleTouch('drop');
-                    isTouchHolding = false;
-                }
-            });
-
-            canvas.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                const touchEndTime = Date.now();
-                const touchDuration = touchEndTime - touchStartTime;
-
-                if (touchDuration < 200 && isTouchHolding) {
-                    handleTouch('rotate');
-                }
-
-                isTouchHolding = false;
-            });
-
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                if (gameState === 'start') {
-                    drawStartScreen();
-                } else if (gameState === 'gameOver') {
-                    drawGameOverScreen();
-                }
-            });
-
-            document.addEventListener('keydown', (event) => {
-                if (gameState === 'playing') {
-                    switch (event.code) {
-                        case 'ArrowLeft':
-                            handleTouch('left');
-                            break;
-                        case 'ArrowRight':
-                            handleTouch('right');
-                            break;
-                        case 'ArrowUp':
-                            handleTouch('rotate');
-                            break;
-                        case 'ArrowDown':
-                            handleTouch('drop');
-                            break;
-                    }
-                } else if (event.code === 'Space' && (gameState === 'start' || gameState === 'gameOver')) {
-                    resetGame();
-                }
-            });
-        }
-
-        function submitScore(playerName, score) {
-            fetch(`${WEBAPP_URL}?action=addScore&player=${encodeURIComponent(playerName)}&score=${score}`)
-                .then(response => response.text())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
-        }
-
-        function getHighScores() {
-            fetch(`${WEBAPP_URL}?action=getScores`)
-                .then(response => response.json())
-                .then(data => displayHighScores(data))
-                .catch(error => console.error('Error:', error));
-        }
-
-        function displayHighScores(scores) {
-            let highScoresHtml = '<ol>';
-            scores.forEach((score, index) => {
-                if (index < 10) {
-                    highScoresHtml += `<li>${score[0]}: ${score[1]}点</li>`;
-                }
-            });
-            highScoresHtml += '</ol>';
-            document.getElementById('highScores').innerHTML = highScoresHtml;
-        }
-
-        function init() {
-            resizeCanvas();
-            initEventListeners();
-            showStartScreen();
-        }
-
-        init();
-
-        // 著者バナー関連の関数
-        const bookDescriptions = [
-            "ゲーム開発者が贈る、心の成長の物語",
-            "内なる光を見つける旅に出よう",
-            "自己発見の旅路があなたを待っています",
-            "魂の探求を描いた感動の一冊",
-            "このゲームの作者による小説です"
-        ];
-
-        function changeBookDescription() {
-            const descElement = document.querySelector('#bookInfo p');
-            let newDesc = bookDescriptions[Math.floor(Math.random() * bookDescriptions.length)];
-            while (newDesc === descElement.textContent) {
-                newDesc = bookDescriptions[Math.floor(Math.random() * bookDescriptions.length)];
-            }
-            descElement.textContent = newDesc;
-        }
-
-        setInterval(changeBookDescription, 10000);
-    </script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
-                        console.log('Service Worker registered:', registration);
-                    })
-                    .catch((error) => {
-                        console.log('Service Worker registration failed:', error);
-                    });
-            });
-        }
-    </script>
+<div id="g">
+<div id="s">スコア: 0 最高コンボ: 0 速度: 1.00x</div>
+<canvas id="C"></canvas>
+<div id="c"></div>
+</div>
+<div id="t" class="r">
+<h2>魂テトリス</h2>
+<button onclick="S()">ゲームスタート</button>
+<button onclick="H()">ハイスコア</button>
+</div>
+<div id="o" class="r">
+<h2>ゲームオーバー</h2>
+<p>スコア: <span id="f"></span></p>
+<button onclick="R()">もう一度プレイ</button>
+<button onclick="H()">ハイスコア</button>
+</div>
+<div id="h" class="r">
+<h2>ハイスコア</h2>
+<div id="l"></div>
+<button onclick="T()">戻る</button>
+</div>
+<div id="a">
+<a href="https://amzn.asia/d/e1grnLa" target="_blank" rel="noopener noreferrer">
+<div id="b">
+<img src="b.jpg" alt="空の器 ~内なる光の旅路~">
+<div id="i">
+<h3>空の器 ~内なる光の旅路~</h3>
+<p>ゲーム開発者が贈る、心の成長の物語</p>
+</div>
+<span id="d">今すぐ読む</span>
+</div>
+</a>
+</div>
+<script>
+const c=document.getElementById('C'),x=c.getContext('2d'),s=document.getElementById('s'),m=document.getElementById('c'),W=10,H=20,D=5,C=['#F00','#00F','#0F0','#FF0'],P=[[[1,1,1,1]],[[1,1],[1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]],N=10,L='NEXT',R=.995,I=5,T=1e3;
+let z,S,p=[],u,n,r=0,g,f=0,E=!1,F=!1,b=0,M=0,G='start',t,X=0,Y=0,Z=0,h=!1,J=0,v=30,w=0,K=0,q=30,A=[];
+const o=document.createElement('canvas'),y=o.getContext('2d');
+const U='https://script.google.com/macros/s/AKfycbxLXVi5Fwztc0lar7eNA1cenpiygIKr-_dWliDYq0pAx7EDFhmP0YfaVZkRGqqAs2zndA/exec';
+function O(){const e=window.innerWidth,i=window.innerHeight,a=Math.ceil(W*.4),d=(W+a)/H;let l,k;e/i>d?(k=i,l=k*d):(l=e,k=l/d);z=Math.floor(Math.min(l/(W+a),k/H));S=z/D;c.width=z*(W+a);c.height=z*H;c.style.width=`${c.width}px`;c.style.height=`${c.height}px`;c.style.position='absolute';c.style.left=`${(e-c.width)/2}px`;c.style.top=`${(i-c.height)/2}px`;o.width=c.width;o.height=c.height}
+function B(){const e=Math.floor(Math.random()*P.length),i=Math.floor(Math.random()*C.length);return{shape:P[e],color:i,x:Math.floor(W/2)-Math.floor(P[e][0].length/2),y:0,vx:0,vy:0}}
+function V(){y.clearRect(0,0,o.width,o.height);y.fillStyle='rgba(0,0,0,0.1)';y.fillRect(0,0,z*W,o.height);for(const e of p){y.fillStyle=C[e.color];y.fillRect(e.x*S,e.y*S,S,S)}x.clearRect(0,0,c.width,c.height);x.drawImage(o,0,0);for(let e=A.length-1;e>=0;e--){const i=A[e];x.fillStyle=`rgba(255,255,255,${i.alpha})`;x.fillRect(0,i.y*z,z*W,z);i.alpha-=.05;if(i.alpha<=0)A.splice(e,1)}}
+function Q(){if(!u)return;x.fillStyle=C[u.color];for(let e=0;e<u.shape.length;e++)for(let i=0;i<u.shape[e].length;i++)u.shape[e][i]&&x.fillRect((u.x+i)*z,(u.y+e)*z,z-1,z-1)}
+function $(){const e=c.width-z*W,i=Math.min(z*.8,(e-N*2)/4),a=z*W+(e-i*4)/2,d=N*2+20;x.fillStyle='rgba(0,0,0,0.2)';x.fillRect(z*W,0,e,c.height);x.strokeStyle='white';x.lineWidth=2;x.beginPath();x.moveTo(z*W,0);x.lineTo(z*W,c.height);x.stroke();x.fillStyle='white';x.font='20px sans-serif';x.textAlign='center';x.fillText(L,z*W+e/2,N+20);x.fillStyle='rgba(255,255,255,0.1)';x.fillRect(a,d,i*4,i*4);x.fillStyle=C[n.color];for(let l=0;l<n.shape.length;l++)for(let k=0;k<n.shape[l].length;k++)n.shape[l][k]&&x.fillRect(a+(k+(4-n.shape[l].length)/2)*i,d+(l+(4-n.shape.length)/2)*i,i-1,i-1)}
+function _(dx,dy){if(!u)return!1;for(let e=0;e<u.shape.length;e++)for(let i=0;i<u.shape[e].length;i++)if(u.shape[e][i]){const a=u.x+i+dx,d=u.y+e+dy;if(a<0||a>=W||d>=H)return!1;const l=a*D,k=d*D;if(p.some(j=>j.x>=l&&j.x<l+D&&j.y>=k&&j.y<k+D))return!1}return!0}
+function aa(){if(!u)return;const e=u.shape[0].map((_,i)=>u.shape.map(row=>row[i]).reverse()),i=u.shape;u.shape=e;if(!_(0,0))u.shape=i}
+function ba(){if(!u)return;for(let e=0;e<u.shape.length;e++)for(let i=0;i<u.shape[e].length;i++)if(u.shape[e][i]){const a=(u.x+i)*D,d=(u.y+e)*D;for(let l=0;l<D;l++)for(let k=0;k<D;k++){const j=d+k;p.push({x:a+l,y:j,color:u.color,fixed:!1,vx:0,vy:0})}}u=null;E=!0}
+function ca(color){const e=new Set,i=[];for(const a of p)if(a.color===color&&!e.has(`${a.x},${a.y}`)){const d=new Set;da(a,color,e,d);i.push(d)}return i}
+function da(e,color,i,a){const d=`${e.x},${e.y}`;if(i.has(d))return;i.add(d);a.add(d);const l=[[0,1],[1,0],[0,-1],[-1,0]];for(const[k,j]of l){const ea=e.x+k,fa=e.y+j,ga=p.find(ha=>ha.x===ea&&ha.y===fa&&ha.color===color);ga&&da(ga,color,i,a)}}
+function ia(e){let i=W*D,a=0;for(const d of e){const[l,_]=d.split(',').map(Number);i=Math.min(i,l);a=Math.max(a,l)}return a-i+1===W*D}
+function ja(e){p=p.filter(i=>!e.has(`${i.x},${i.y}`))}
+function ka(e,i){const a=i*100;let d;if(e<=1)d=1;else if(e===2)d=2;else{const l=1.8;d=Math.pow(l,e-2)}return Math.floor(a*d)}
+function la(e){if(e<2)return;let i;if(e===2)i="2.00";else{const a=1.8;i=Math.pow(a,e-2).toFixed(2)}m.textContent=`${e} コンボ! (x${i})`;m.style.display='block';clearTimeout(t);t=setTimeout(()=>{m.style.display='none'},2e3)}
+function ma(){let e=!1,i=0;for(let a=0;a<C.length;a++){const d=ca(a);for(const l of d)if(ia(l)){const k=Math.floor(l.values().next().value.split(',')[1]/D);A.push({y:k,alpha:1});ja(l);e=!0;i++}}const na=Date.now();if(e){if(na-J<T)b++;else b=1;J=na;const a=ka(b,i);r+=a;la(b);M=Math.max(M,b)}return e}
+function oa(){let e=!1;const i=.5,a=.8;p.forEach(d=>{if(d.fixed)return;d.vy=(d.vy||0)+i;let l=d.x+(d.vx||0),k=d.y+d.vy;if(l<0||l>=W*D||pa(Math.floor(l),Math.floor(d.y))){d.vx=0;l=d.x}if(k>=H*D-1||pa(Math.floor(l),Math.floor(k))){d.vy*=-.5;k=Math.min(k,H*D-1);if(!pa(Math.floor(l)-1,Math.floor(k)))d.vx=-1;else if(!pa(Math.floor(l)+1,Math.floor(k)))d.vx=1;else{d.fixed=!0;d.vx=0;d.vy=0}}if(l!==d.x||k!==d.y){d.x=l;d.y=k;e=!0}d.vx*=a;d.vy*=a});return e}
+function pa(x,y){return p.some(e=>Math.floor(e.x)===x&&Math.floor(e.y)===y&&e.fixed)}
+function qa(){s.textContent=`スコア: ${r} 最高コンボ: ${M}x 速度: ${(30/v).toFixed(2)}x`}
+function ra(){p=p.filter(e=>e.x>=0&&e.x<W*D&&e.y>=0&&e.y<H*D)}
+function sa(e){document.querySelectorAll('.r').forEach(i=>{i.style.display='none'});document.getElementById(e).style.display='block';const i=document.getElementById('a');if(e==='g'){i.style.display='none';document.getElementById('g').classList.remove('w')}else{i.style.display='flex';document.getElementById(e).classList.add('w')}}
+function T(){sa('t')}
+function S(){sa('g');ta()}
+function ua(){G='gameOver';cancelAnimationFrame(g);document.getElementById('f').textContent=r;sa('o');let e=prompt("あなたの名前を入力してください：");if(e)va(e,r)}
+function R(){ta();S()}
+function H(){sa('h');wa()}
+function ta(){p=[];r=0;b=0;M=0;E=!1;F=!1;f=0;J=0;u=B();n=B();v=30;w=0;qa();G='playing';xa()}
+function ya(){if(!u)return!1;return!_(0,0)}
+function xa(e){if(e-K<1e3/q){g=requestAnimationFrame(xa);return}K=e;if(G!=='playing')return;if(ya()){ua();return}f++;if(f%Math.floor(v)===0&&!E&&!F&&u){if(_(0,1))u.y++;else{ba();E=!0}}if(E){if(!oa()){E=!1;F=!0}}if(F){const i=ma();if(i)E=!0;else{F=!1;if(!u){u=n;n=B()}}}if(f%100===0)ra();if(f%I===0){v*=R;w++}V();if(u&&!E&&!F)Q();$();qa();g=requestAnimationFrame(xa)}
+function za(e){if(G!=='playing')return;switch(e){case'left':_(-1,0)&&u.x--;break;case'right':_(1,0)&&u.x++;break;case'rotate':aa();break;case'drop':while(_(0,1))u.y++;ba();break}}
+function Aa(){c.addEventListener('touchstart',e=>{e.preventDefault();const i=e.touches[0];X=i.clientX;Y=i.clientY;Z=Date.now();h=!0});c.addEventListener('touchmove',e=>{e.preventDefault();if(G!=='playing')return;const i=e.touches[0],a=i.clientX-X,d=i.clientY-Y;if(Math.abs(a)>z){za(a>0?'right':'left');X=i.clientX}if(d>z&&h){za('drop');h=!1}});c.addEventListener('touchend',e=>{e.preventDefault();const i=Date.now(),a=i-Z;if(a<200&&h)za('rotate');h=!1});window.addEventListener('resize',()=>{O();if(G==='start')Ba();else if(G==='gameOver')Ca()});document.addEventListener('keydown',e=>{if(G==='playing')switch(e.code){case'ArrowLeft':za('left');break;case'ArrowRight':za('right');break;case'ArrowUp':za('rotate');break;case'ArrowDown':za('drop');break}else if(e.code==='Space'&&(G==='start'||G==='gameOver'))ta()})}
+function va(e,i){fetch(`${U}?action=addScore&player=${encodeURIComponent(e)}&score=${i}`).then(a=>a.text()).then(a=>console.log(a)).catch(a=>console.error('Error:',a))}
+function wa(){fetch(`${U}?action=getScores`).then(e=>e.json()).then(e=>Da(e)).catch(e=>console.error('Error:',e))}
+function Da(e){let i='<ol>';e.forEach((a,d)=>{if(d<10)i+=`<li>${a[0]}: ${a[1]}点</li>`});i+='</ol>';document.getElementById('l').innerHTML=i}
+function Ea(){O();Aa();T()}
+Ea();
+const Fa=['ゲーム開発者が贈る、心の成長の物語','内なる光を見つける旅に出よう','自己発見の旅路があなたを待っています','魂の探求を描いた感動の一冊','このゲームの作者による小説です'];
+function Ga(){const e=document.querySelector('#i p');let i=Fa[Math.floor(Math.random()*Fa.length)];while(i===e.textContent)i=Fa[Math.floor(Math.random()*Fa.length)];e.textContent=i}
+setInterval(Ga,1e4);
+</script>
+<script>
+if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(e=>{console.log('Service Worker registered:',e)}).catch(e=>{console.log('Service Worker registration failed:',e)})})}
+</script>
 </body>
 </html>
