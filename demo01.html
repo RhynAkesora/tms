@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <!-- Meta Tags for SEO, Character Encoding, and Viewport -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愛知活動支援サービス | ひきこもり・不登校・カウンセリングの専門家</title>
+    <meta name="description" content="愛知県刈谷市の愛知活動支援サービス。ひきこもり・不登校・心の悩み・高齢者支援に対し、多様な専門家チームが一人ひとりに寄り添う個別プランで、温かく継続的にサポートします。">
+    <meta name="keywords" content="ひきこもり支援, 不登校相談, カウンセリング, 高齢者支援, 心理サポート, 愛知県, 刈谷市, 専門家, 継続支援">
+    <meta name="author" content="愛知活動支援サービス">
+    <meta property="og:title" content="愛知活動支援サービス | ひきこもり・不登校・カウンセリングの専門家">
+    <meta property="og:description" content="愛知県でひきこもり、不登校などのお悩みに。専門家が一人ひとりに寄り添いサポートします。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com">
+    <meta property="og:image" content="http://googleusercontent.com/file_content/3">
+
+    <!-- Stylesheets and Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .hero-bg {
+            background-image: url('http://googleusercontent.com/file_content/3');
+            background-size: cover;
+            background-position: center 60%;
+        }
+        .trust-bg {
+            background-image: url('http://googleusercontent.com/file_content/5');
+            background-size: cover;
+            background-position: center;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 2.75rem;
+            }
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.125rem;
+            color: #4a5568;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .faq-question {
+            cursor: pointer;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- Header -->
+    <header id="header" class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center py-4" id="header-inner">
+                <a href="#" class="text-xl md:text-2xl font-bold text-blue-800">愛知活動支援サービス</a>
+                <nav class="hidden lg:flex items-center space-x-7">
+                    <a href="#about" class="text-gray-600 hover:text-blue-700 transition font-medium">私たちについて</a>
+                    <a href="#services" class="text-gray-600 hover:text-blue-700 transition font-medium">サービス内容</a>
+                    <a href="#staff" class="text-gray-600 hover:text-blue-700 transition font-medium">スタッフ紹介</a>
+                    <a href="#faq" class="text-gray-600 hover:text-blue-700 transition font-medium">よくあるご質問</a>
+                    <a href="#contact" class="text-gray-600 hover:text-blue-700 transition font-medium">お問い合わせ</a>
+                </nav>
+                <a href="#contact" class="hidden lg:block bg-orange-500 text-white font-bold py-2.5 px-6 rounded-full hover:bg-orange-600 transition duration-300 transform hover:scale-105">
+                    <i class="fas fa-envelope mr-2"></i>無料相談はこちら
+                </a>
+                <button id="mobile-menu-button" class="lg:hidden text-gray-700 focus:outline-none">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden">
+            <div class="px-4 pt-2 pb-4 border-t border-gray-200 space-y-1">
+                <a href="#about" class="mobile-menu-link block py-2 text-gray-700 hover:bg-blue-50 rounded-md px-3">私たちについて</a>
+                <a href="#services" class="mobile-menu-link block py-2 text-gray-700 hover:bg-blue-50 rounded-md px-3">サービス内容</a>
+                <a href="#staff" class="mobile-menu-link block py-2 text-gray-700 hover:bg-blue-50 rounded-md px-3">スタッフ紹介</a>
+                <a href="#faq" class="mobile-menu-link block py-2 text-gray-700 hover:bg-blue-50 rounded-md px-3">よくあるご質問</a>
+                <a href="#contact" class="mobile-menu-link block py-2 text-gray-700 hover:bg-blue-50 rounded-md px-3">お問い合わせ</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/30"></div>
+            <div class="relative min-h-[80vh] flex items-center justify-center">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
+                        <span class="text-yellow-300">一人じゃない</span>、あなたのペースで未来へ
+                    </h1>
+                    <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto drop-shadow-md">
+                        ひきこもり・不登校・心の悩み・高齢者支援まで、<br>
+                        愛知の専門家チームが、温かい繋がりであなたの「これから」を支えます。
+                    </p>
+                    <a href="#contact" class="bg-orange-500 text-white font-bold py-4 px-10 rounded-full hover:bg-orange-600 transition duration-300 text-lg shadow-xl transform hover:scale-105">
+                        まずはお気軽にご相談ください
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20 md:py-24 bg-white fade-in-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-blue-800">私たちについて</h2>
+                <p class="section-subtitle">私たちは「誰もが自分らしく生きられる社会」の実現を理念に掲げ、社会的に孤立しがちな方々を支援します。一人ひとりの尊厳と選択を尊重し、地域社会との繋がりを育むことが私たちの使命です。</p>
+                
+                <div class="bg-blue-50 p-8 md:p-12 rounded-lg shadow-lg mb-16 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                    <img src="https://placehold.co/250x250/a0d2eb/333333?text=代表" alt="代表 藤本和廣氏のポートレート" class="w-48 h-48 md:w-60 md:h-60 rounded-full object-cover border-8 border-white shadow-xl flex-shrink-0">
+                    <div class="flex-1">
+                        <h3 class="text-2xl md:text-3xl font-bold text-blue-800">代表挨拶</h3>
+                        <p class="text-gray-700 mt-4 leading-relaxed">
+                            愛知活動支援サービスのホームページをご覧いただき、ありがとうございます。<br>
+                            現代社会において、様々な理由で社会との繋がりに困難を感じている方々が増えています。引きこもりや不登校、高齢者の孤立など、一人ひとりが抱える課題は多様で複雑です。<br>
+                            私たちは、専門的な知識と経験を持つスタッフが、お一人お一人の状況に寄り添い、その方らしい社会参加への道筋を一緒に見つけることを使命としています。<br>
+                            地域社会における温かい支援の輪を広げ、誰もが安心して暮らせる社会の実現に向けて、これからも歩み続けてまいります。
+                        </p>
+                        <p class="text-right mt-6 font-bold text-lg">愛知活動支援サービス 代表 藤本和廣</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 text-center mt-20">
+                    <div class="p-8">
+                        <div class="text-blue-500 mb-4 inline-block"><i class="fas fa-bullseye fa-3x"></i></div>
+                        <h3 class="text-xl font-bold mb-3">ミッション</h3>
+                        <p class="text-gray-600">一人ひとりの個性と尊厳を大切にし、社会参加への道筋を共に歩む</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="text-green-500 mb-4 inline-block"><i class="fas fa-eye fa-3x"></i></div>
+                        <h3 class="text-xl font-bold mb-3">ビジョン</h3>
+                        <p class="text-gray-600">誰もが安心して暮らせる、温かい地域社会の実現</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="text-orange-500 mb-4 inline-block"><i class="fas fa-gem fa-3x"></i></div>
+                        <h3 class="text-xl font-bold mb-3">バリュー</h3>
+                        <p class="text-gray-600">寄り添う心・高い専門性・継続性・地域連携</p>
+                    </div>
+                </div>
+
+                <div class="mt-20">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">愛知活動支援サービスのサイクル</h3>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">私たちの支援は、理念の実践から始まり、専門チームが連携し、常に質の向上に努め、そして地域社会の繋がりを育むというサイクルで成り立っています。</p>
+                    <img src="http://googleusercontent.com/file_content/4" alt="理念を実践し、多様なチームが関与し、質の向上に努め、地域社会の繋がりを育むというサービスのサイクル図" class="w-full max-w-3xl mx-auto rounded-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 md:py-24 bg-blue-50 fade-in-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-blue-800">包括的なサポートサービス</h2>
+                <p class="section-subtitle">私たちは、孤立しがちな方々への継続的な支援を行っています。各サービスは独立していますが、必要に応じて複合的に提供することも可能です。すべてのサービスは専門的な知識と経験を持つスタッフによって提供されます。</p>
+                <div class="max-w-4xl mx-auto mb-16">
+                    <img src="http://googleusercontent.com/file_content/2" alt="ひきこもり支援、不登校相談、高齢者サポートを包括的に提供するサービス図" class="w-full">
+                </div>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300"><div class="p-6"><div class="flex items-center text-blue-600 mb-4"><i class="fas fa-house-user fa-2x mr-3"></i><h3 class="text-xl font-bold">ひきこもり支援</h3></div><p class="text-gray-600">社会との繋がりを少しずつ取り戻すお手伝いをします。経験豊富なカウンセラーが段階的な社会復帰をサポートします。</p></div></div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300"><div class="p-6"><div class="flex items-center text-green-600 mb-4"><i class="fas fa-school-flag fa-2x mr-3"></i><h3 class="text-xl font-bold">不登校相談</h3></div><p class="text-gray-600">学校、家庭、生徒の間に立ち、それぞれの状況に応じた解決策を一緒に考え、学習支援も行います。</p></div></div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300"><div class="p-6"><div class="flex items-center text-yellow-600 mb-4"><i class="fas fa-comment-dots fa-2x mr-3"></i><h3 class="text-xl font-bold">カウンセリング</h3></div><p class="text-gray-600">心の悩みや不安、ストレスに専門的な立場からお話を伺います。安心できる環境で自分と向き合えます。</p></div></div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300"><div class="p-6"><div class="flex items-center text-red-600 mb-4"><i class="fas fa-heart-pulse fa-2x mr-3"></i><h3 class="text-xl font-bold">高齢者支援</h3></div><p class="text-gray-600">買い物代行や通院同行など、日常生活をサポートし、安心して暮らせる環境づくりをお手伝いします。</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Staff Section -->
+        <section id="staff" class="py-20 md:py-24 bg-white fade-in-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-blue-800">専門知識と経験を持つスタッフ</h2>
+                <p class="section-subtitle">私たちの専門スタッフは、それぞれの分野で豊富な経験と知識を持ち、お客様一人ひとりに寄り添ったサポートを心がけています。</p>
+                <div class="space-y-12">
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/fecaca/333333?text=A.T" alt="ツネオカアイコ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-red-600">ツネオカ アイコ</span> <span class="text-base font-normal text-gray-500 ml-2">看護師 / 認定心理士 / チャイルドカウンセラー</span></h3><p class="font-semibold my-2">担当サービス: 引きこもり支援, 不登校相談, カウンセリング, 高齢者支援</p><p class="text-gray-600 leading-relaxed">初めまして。総合病院、デイサービスで看護師として20年ほど勤務し、現在児童発達支援にも携わっています。自身の子育てに悩んでいた日々はとても辛いものでした。当時は知識がなく、相談する人も場所もわからないまま1人でもがいていました。人に話せることがどれだけ意味深いかを経験しました。少しでも、辛い気持ち、モヤモヤした気持ちが楽になれば、、。その人らしくいられることを願い、そのお手伝いができればと思っています。お気軽にご相談ください。カウンセラー、不登校支援、引きこもり支援などの他、高齢者支援もお気軽にどうぞ。</p><div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div></div></div>
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/d1fae5/333333?text=A.N" alt="中山あさみ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-red-600">中山 あさみ</span> <span class="text-base font-normal text-gray-500 ml-2">パラリーガル</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング</p><p class="text-gray-600 leading-relaxed">はじめまして。ワーママとして2人の子供を育て上げてきました。そのため、仕事と育児の両立の大変さ、人間関係や子供に関する悩み等様々な問題に寄り添えればと思っております。また、パラリーガルの認定資格もありますので、法的支援が必要な場合は、弁護士との橋渡し役にもなれます。お気軽にお問い合わせください。よろしくお願いいたします。</p><div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div></div></div>
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/cce7f0/333333?text=R.K" alt="神谷亮太郎氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">神谷 亮太郎</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング, 高齢者支援, 買い物代行</p><p class="text-gray-600 leading-relaxed">はじめまして。カウンセリングはクライエントさんの声にじっくり耳を傾けることを大切にしています。今、どんなことに悩んでいるのか。不安やイライラ、どうしたらいいか分からない状態、気分の落ち込みなどを、話をすることで、つらい気持ちが少しでも楽になれるよう気持ちを受け止めていきたいと思います。又、クライエントさんの想いや価値観を大切にしながら、今の生きづらさが減って、自分らしく楽に生きられるようにお役に立ちたいと思っています。</p><div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div></div></div>
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/fed7aa/333333?text=W.F" alt="古橋渉氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">古橋 渉</span> <span class="text-base font-normal text-gray-500 ml-2">介護福祉士</span></h3><p class="font-semibold my-2">担当サービス: 高齢者支援, カウンセリング</p><p class="text-gray-600 leading-relaxed">こんにちは、古橋渉と申します。介護福祉士として長年の経験を積んできました。高齢者の皆さまの日常生活をサポートし、安心して過ごせる環境づくりに取り組んでいます。また、ご家族の方々のお悩みやご相談にも真摯に対応させていただきます。一人ひとりのペースに合わせて、丁寧にサポートいたします。</p><div class="mt-3 text-lg font-bold text-orange-500">3,500円/時間</div></div></div>
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/e9d5ff/333333?text=K.I" alt="岩田煌空鳳氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">岩田 煌空鳳 (かぐや)</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング</p><p class="text-gray-600 leading-relaxed">閲覧頂きありがとうございます。初めまして岩田煌空鳳（かぐや）と申します。僕はまだ20歳で人生経験が浅いですが、特に若い世代の方達には、色々な話をより親身に近くで貴方のお話を聴けると思います。あなたが自然と笑えるようになるまで色々なサポートをしていきたいと考えています。</p><div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div></div></div>
+                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/bfdbfe/333333?text=K.F" alt="藤本和廣氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">藤本 和廣</span> <span class="text-base font-normal text-gray-500 ml-2">代表</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング (恋愛, 仕事, 悩み事全般), 買い物代行</p><p class="text-gray-600 leading-relaxed">初めまして。代表の藤本と申します。私自身の様々な経験を活かし、クライエントさんの心が少しでも軽くなるように努めたいと考えています。</p><div class="mt-3 text-lg font-bold text-orange-500">3,000円/時間</div></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 md:py-24 bg-blue-50 fade-in-section">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-blue-800">よくあるご質問</h2>
+                <p class="section-subtitle">サービスに関するご不明な点は、まずこちらをご確認ください。</p>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div class="faq-item bg-white rounded-lg shadow-md"><div class="faq-question p-6 flex justify-between items-center"><span class="font-bold text-lg">Q. どのような支払い方法がありますか？</span><i class="fas fa-chevron-down transition-transform"></i></div><div class="faq-answer px-6 pb-6 text-gray-600"><p>A. クレジットカード決済（Stripeを利用）と、現金でのお支払いに対応しております。現金でのお支払いをご希望の場合は、別途ご相談ください。</p></div></div>
+                    <div class="faq-item bg-white rounded-lg shadow-md"><div class="faq-question p-6 flex justify-between items-center"><span class="font-bold text-lg">Q. キャンセル料はいつから発生しますか？</span><i class="fas fa-chevron-down transition-transform"></i></div><div class="faq-answer px-6 pb-6 text-gray-600"><p>A. ご予約の24時間前までは無料でキャンセル可能です。24時間前を過ぎますと50%、当日キャンセルの場合は100%のキャンセル料金が発生いたします。ただし、緊急事態や体調不良など、やむを得ない事情の場合は個別にご相談に応じますので、ご安心ください。</p></div></div>
+                     <div class="faq-item bg-white rounded-lg shadow-md"><div class="faq-question p-6 flex justify-between items-center"><span class="font-bold text-lg">Q. 相談方法はどのような形式がありますか？</span><i class="fas fa-chevron-down transition-transform"></i></div><div class="faq-answer px-6 pb-6 text-gray-600"><p>A. 対面でのカウンセリング・支援のほか、ご希望に応じてオンラインでのご相談も可能です。遠方にお住まいの方や、外出が難しい方もお気軽にご利用いただけます。</p></div></div>
+                    <div class="faq-item bg-white rounded-lg shadow-md"><div class="faq-question p-6 flex justify-between items-center"><span class="font-bold text-lg">Q. 家族だけでも相談できますか？</span><i class="fas fa-chevron-down transition-transform"></i></div><div class="faq-answer px-6 pb-6 text-gray-600"><p>A. はい、もちろん可能です。ご本人様が相談をためらわれている場合など、まずはご家族の方だけで状況をお聞かせいただくことも非常に有効です。ご家族の方向けのサポートやアドバイスも行っております。</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="trust-bg bg-fixed">
+            <div class="bg-blue-900/80 py-20 md:py-24 text-white fade-in-section">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold">まずはお話、聞かせてください</h2>
+                    <p class="mt-4 mb-10 max-w-2xl mx-auto">一人で悩まず、専門家にご相談ください。ご本人様からでも、ご家族の方からでも、<br>最初の一歩を私たちが全力でサポートします。</p>
+                    <div class="bg-white p-8 md:p-12 rounded-lg shadow-2xl max-w-4xl mx-auto text-left text-gray-800">
+                        <div class="grid md:grid-cols-3 gap-8 md:gap-6 text-center">
+                            <a href="tel:0566-70-8810" class="block p-4 rounded-lg hover:bg-gray-100 transition"><i class="fas fa-phone-alt text-4xl text-blue-600 mb-3"></i><h3 class="text-xl font-bold">お電話で相談</h3><p class="text-gray-500 mt-1">8:00 〜 20:00</p></a>
+                            <a href="https://line.me/ti/p/YOUR_LINE_ID" target="_blank" class="block p-4 rounded-lg hover:bg-green-50 transition bg-green-100 border border-green-200"><i class="fab fa-line text-4xl text-green-500 mb-3"></i><h3 class="text-xl font-bold">LINEで相談</h3><p class="text-gray-500 mt-1">24時間受付中</p></a>
+                            <div class="block p-4 rounded-lg hover:bg-gray-100 transition" id="email-contact-box"><i class="fas fa-envelope text-4xl text-gray-600 mb-3"></i><h3 class="text-xl font-bold">メールで相談</h3><p class="text-gray-500 mt-1">24時間受付中</p></div>
+                        </div>
+                        <div class="mt-10 border-t pt-10">
+                            <h3 class="text-xl font-bold mb-6 text-center">お問い合わせフォーム</h3>
+                            <form action="#" method="POST">
+                                <div class="grid sm:grid-cols-2 gap-6 mb-4">
+                                    <div><label for="name" class="block text-gray-700 font-medium mb-2">お名前 <span class="text-red-500">*</span></label><input type="text" id="name" name="name" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
+                                    <div><label for="email" class="block text-gray-700 font-medium mb-2">メールアドレス <span class="text-red-500">*</span></label><input type="email" id="email" name="email" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
+                                </div>
+                                <div class="mb-6"><label for="message" class="block text-gray-700 font-medium mb-2">お問い合わせ内容 <span class="text-red-500">*</span></label><textarea id="message" name="message" rows="6" class="w-full px-4 py-3 bg-gray-100 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea></div>
+                                <div class="text-center"><button type="submit" class="bg-orange-500 text-white font-bold py-3 px-12 rounded-full hover:bg-orange-600 transition duration-300 text-lg transform hover:scale-105">内容を確認して送信する</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-bold mb-4">愛知活動支援サービス</h3>
+                    <p class="text-gray-400">設立: 2024年</p>
+                    <p class="text-gray-400 mt-2">所在地: 〒448-0803 愛知県刈谷市野田町陣戸池72-1</p>
+                    <p class="text-gray-400 mt-2">電話: <a href="tel:0566-70-8810" class="hover:text-white transition">0566-70-8810</a> (受付 8:00-20:00)</p>
+                    <p class="text-gray-400">メール: <span id="email-footer"></span></p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">サイトマップ</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><a href="#about" class="hover:text-white transition">私たちについて</a></li>
+                        <li><a href="#services" class="hover:text-white transition">サービス内容</a></li>
+                        <li><a href="#staff" class="hover:text-white transition">スタッフ紹介</a></li>
+                        <li><a href="#faq" class="hover:text-white transition">よくあるご質問</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">企業情報</h3>
+                     <ul class="text-gray-400 space-y-2">
+                        <li><a href="#" class="hover:text-white transition">会社概要</a></li>
+                        <li><a href="#" class="hover:text-white transition">特定商取引法に基づく表記</a></li>
+                        <li><a href="#" class="hover:text-white transition">プライバシーポリシー</a></li>
+                     </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-8 text-center text-gray-500">
+                <p>&copy; 2025 愛知活動支援サービス. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Fade-in sections on scroll
+            const fadeInSections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            fadeInSections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = question.querySelector('i');
+
+                question.addEventListener('click', () => {
+                    const isVisible = answer.style.maxHeight;
+                    faqItems.forEach(i => {
+                        i.querySelector('.faq-answer').style.maxHeight = null;
+                        i.querySelector('.faq-question i').style.transform = 'rotate(0deg)';
+                    });
+
+                    if (!isVisible) {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+            
+            // Email De-obfuscation to prevent spam bots
+            const user = 'akss20250703';
+            const domain = 'gmail.com';
+            const emailAddress = `${user}@${domain}`;
+            
+            const emailContactBox = document.getElementById('email-contact-box');
+            if(emailContactBox) {
+                emailContactBox.addEventListener('click', () => {
+                    window.location.href = `mailto:${emailAddress}`;
+                });
+            }
+
+            const emailFooterEl = document.getElementById('email-footer');
+            if (emailFooterEl) {
+                emailFooterEl.innerHTML = `<a href="mailto:${emailAddress}" class="hover:text-white transition">${emailAddress}</a>`;
+            }
+        });
+    </script>
+</body>
+</html>
