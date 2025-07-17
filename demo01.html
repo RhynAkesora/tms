@@ -74,6 +74,13 @@
             overflow: hidden;
             transition: max-height 0.5s ease-in-out;
         }
+        .staff-card {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .filter-btn.active {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
@@ -146,27 +153,15 @@
                             私たちは、専門的な知識と経験を持つスタッフが、お一人お一人の状況に寄り添い、その方らしい社会参加への道筋を一緒に見つけることを使命としています。<br>
                             地域社会における温かい支援の輪を広げ、誰もが安心して暮らせる社会の実現に向けて、これからも歩み続けてまいります。
                         </p>
-                        <p class="text-right mt-6 font-bold text-lg">愛知活動支援サービス <br>
+                        <p class="text-right mt-6 font-bold text-lg">愛知活動支援サービス<br>
                             代表 藤本和廣</p>
                     </div>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8 text-center mt-20">
-                    <div class="p-8">
-                        <div class="text-blue-500 mb-4 inline-block"><i class="fas fa-bullseye fa-3x"></i></div>
-                        <h3 class="text-xl font-bold mb-3">ミッション</h3>
-                        <p class="text-gray-600">一人ひとりの個性と尊厳を大切にし、社会参加への道筋を共に歩む</p>
-                    </div>
-                    <div class="p-8">
-                        <div class="text-green-500 mb-4 inline-block"><i class="fas fa-eye fa-3x"></i></div>
-                        <h3 class="text-xl font-bold mb-3">ビジョン</h3>
-                        <p class="text-gray-600">誰もが安心して暮らせる、温かい地域社会の実現</p>
-                    </div>
-                    <div class="p-8">
-                        <div class="text-orange-500 mb-4 inline-block"><i class="fas fa-gem fa-3x"></i></div>
-                        <h3 class="text-xl font-bold mb-3">バリュー</h3>
-                        <p class="text-gray-600">寄り添う心・高い専門性・継続性・地域連携</p>
-                    </div>
+                    <div class="p-8"><div class="text-blue-500 mb-4 inline-block"><i class="fas fa-bullseye fa-3x"></i></div><h3 class="text-xl font-bold mb-3">ミッション</h3><p class="text-gray-600">一人ひとりの個性と尊厳を大切にし、社会参加への道筋を共に歩む</p></div>
+                    <div class="p-8"><div class="text-green-500 mb-4 inline-block"><i class="fas fa-eye fa-3x"></i></div><h3 class="text-xl font-bold mb-3">ビジョン</h3><p class="text-gray-600">誰もが安心して暮らせる、温かい地域社会の実現</p></div>
+                    <div class="p-8"><div class="text-orange-500 mb-4 inline-block"><i class="fas fa-gem fa-3x"></i></div><h3 class="text-xl font-bold mb-3">バリュー</h3><p class="text-gray-600">寄り添う心・高い専門性・継続性・地域連携</p></div>
                 </div>
 
                 <div class="mt-20">
@@ -198,14 +193,79 @@
         <section id="staff" class="py-20 md:py-24 bg-white fade-in-section">
             <div class="container mx-auto px-6">
                 <h2 class="section-title text-blue-800">専門知識と経験を持つスタッフ</h2>
-                <p class="section-subtitle">私たちの専門スタッフは、それぞれの分野で豊富な経験と知識を持ち、お客様一人ひとりに寄り添ったサポートを心がけています。</p>
-                <div class="space-y-12">
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/fecaca/333333?text=A.T" alt="ツネオカアイコ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-red-600">ツネオカ アイコ</span> <span class="text-base font-normal text-gray-500 ml-2">看護師 / 認定心理士 / チャイルドカウンセラー</span></h3><p class="font-semibold my-2">担当サービス: 引きこもり支援, 不登校相談, カウンセリング, 高齢者支援</p><p class="text-gray-600 leading-relaxed">初めまして。総合病院、デイサービスで看護師として20年ほど勤務し、現在児童発達支援にも携わっています。自身の子育てに悩んでいた日々はとても辛いものでした。当時は知識がなく、相談する人も場所もわからないまま1人でもがいていました。人に話せることがどれだけ意味深いかを経験しました。少しでも、辛い気持ち、モヤモヤした気持ちが楽になれば、、。その人らしくいられることを願い、そのお手伝いができればと思っています。お気軽にご相談ください。カウンセラー、不登校支援、引きこもり支援などの他、高齢者支援もお気軽にどうぞ。</p><div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div></div></div>
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/d1fae5/333333?text=A.N" alt="中山あさみ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-red-600">中山 あさみ</span> <span class="text-base font-normal text-gray-500 ml-2">パラリーガル</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング</p><p class="text-gray-600 leading-relaxed">はじめまして。ワーママとして2人の子供を育て上げてきました。そのため、仕事と育児の両立の大変さ、人間関係や子供に関する悩み等様々な問題に寄り添えればと思っております。また、パラリーガルの認定資格もありますので、法的支援が必要な場合は、弁護士との橋渡し役にもなれます。お気軽にお問い合わせください。よろしくお願いいたします。</p><div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div></div></div>
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/cce7f0/333333?text=R.K" alt="神谷亮太郎氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">神谷 亮太郎</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング, 高齢者支援, 買い物代行</p><p class="text-gray-600 leading-relaxed">はじめまして。カウンセリングはクライエントさんの声にじっくり耳を傾けることを大切にしています。今、どんなことに悩んでいるのか。不安やイライラ、どうしたらいいか分からない状態、気分の落ち込みなどを、話をすることで、つらい気持ちが少しでも楽になれるよう気持ちを受け止めていきたいと思います。又、クライエントさんの想いや価値観を大切にしながら、今の生きづらさが減って、自分らしく楽に生きられるようにお役に立ちたいと思っています。</p><div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div></div></div>
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/fed7aa/333333?text=W.F" alt="古橋渉氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">古橋 渉</span> <span class="text-base font-normal text-gray-500 ml-2">介護福祉士</span></h3><p class="font-semibold my-2">担当サービス: 高齢者支援, カウンセリング</p><p class="text-gray-600 leading-relaxed">こんにちは、古橋渉と申します。介護福祉士として長年の経験を積んできました。高齢者の皆さまの日常生活をサポートし、安心して過ごせる環境づくりに取り組んでいます。また、ご家族の方々のお悩みやご相談にも真摯に対応させていただきます。一人ひとりのペースに合わせて、丁寧にサポートいたします。</p><div class="mt-3 text-lg font-bold text-orange-500">3,500円/時間</div></div></div>
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="https://placehold.co/150x150/e9d5ff/333333?text=K.I" alt="岩田煌空鳳氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">岩田 煌空鳳 (かぐや)</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング</p><p class="text-gray-600 leading-relaxed">閲覧頂きありがとうございます。初めまして岩田煌空鳳（かぐや）と申します。僕はまだ20歳で人生経験が浅いですが、特に若い世代の方達には、色々な話をより親身に近くで貴方のお話を聴けると思います。あなたが自然と笑えるようになるまで色々なサポートをしていきたいと考えています。</p><div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div></div></div>
-                    <div class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><img src="teko.jpg" alt="藤本和廣氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md"><div class="text-center md:text-left flex-1"><h3 class="text-2xl font-bold"><span class="text-blue-600">藤本 和廣</span> <span class="text-base font-normal text-gray-500 ml-2">代表</span></h3><p class="font-semibold my-2">担当サービス: カウンセリング (恋愛, 仕事, 悩み事全般), 買い物代行</p><p class="text-gray-600 leading-relaxed">初めまして。代表の藤本と申します。私自身の様々な経験を活かし、クライエントさんの心が少しでも軽くなるように努めたいと考えています。</p><div class="mt-3 text-lg font-bold text-orange-500">3,000円/時間</div></div></div>
+                <p class="section-subtitle">私たちの専門スタッフは、それぞれの分野で豊富な経験と知識を持ち、お客様一人ひとりに寄り添ったサポートを心がけています。<br>ご希望のサービスから担当スタッフを探すこともできます。</p>
+                
+                <!-- Filter Buttons -->
+                <div id="filter-container" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
+                    <button class="filter-btn active" data-filter="all">全員</button>
+                    <button class="filter-btn" data-filter="hikikomori">ひきこもり支援</button>
+                    <button class="filter-btn" data-filter="futoko">不登校相談</button>
+                    <button class="filter-btn" data-filter="counseling">カウンセリング</button>
+                    <button class="filter-btn" data-filter="koureisha">高齢者支援</button>
+                    <button class="filter-btn" data-filter="kaimono">買い物代行</button>
+                </div>
+
+                <div id="staff-list" class="space-y-12">
+                    <!-- Staff Card: ツネオカアイコ -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["hikikomori", "futoko", "counseling", "koureisha"]'>
+                        <img src="https://placehold.co/150x150/fecaca/333333?text=A.T" alt="ツネオカアイコ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-red-600">ツネオカ アイコ</span> <span class="text-base font-normal text-gray-500 ml-2">看護師 / 認定心理士 / チャイルドカウンセラー</span></h3>
+                            <p class="font-semibold my-2">担当サービス: 引きこもり支援, 不登校相談, カウンセリング, 高齢者支援</p>
+                            <p class="text-gray-600 leading-relaxed">初めまして。総合病院、デイサービスで看護師として20年ほど勤務し、現在児童発達支援にも携わっています。自身の子育てに悩んでいた日々はとても辛いものでした。当時は知識がなく、相談する人も場所もわからないまま1人でもがいていました。人に話せることがどれだけ意味深いかを経験しました。少しでも、辛い気持ち、モヤモヤした気持ちが楽になれば、、。その人らしくいられることを願い、そのお手伝いができればと思っています。お気軽にご相談ください。カウンセラー、不登校支援、引きこもり支援などの他、高齢者支援もお気軽にどうぞ。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div>
+                        </div>
+                    </div>
+                    <!-- Staff Card: 中山あさみ -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["counseling"]'>
+                        <img src="https://placehold.co/150x150/d1fae5/333333?text=A.N" alt="中山あさみ氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-red-600">中山 あさみ</span> <span class="text-base font-normal text-gray-500 ml-2">パラリーガル</span></h3>
+                            <p class="font-semibold my-2">担当サービス: カウンセリング</p>
+                            <p class="text-gray-600 leading-relaxed">はじめまして。ワーママとして2人の子供を育て上げてきました。そのため、仕事と育児の両立の大変さ、人間関係や子供に関する悩み等様々な問題に寄り添えればと思っております。また、パラリーガルの認定資格もありますので、法的支援が必要な場合は、弁護士との橋渡し役にもなれます。お気軽にお問い合わせください。よろしくお願いいたします。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">4,000円/時間</div>
+                        </div>
+                    </div>
+                    <!-- Staff Card: 神谷亮太郎 -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["counseling", "koureisha", "kaimono"]'>
+                        <img src="https://placehold.co/150x150/cce7f0/333333?text=R.K" alt="神谷亮太郎氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-blue-600">神谷 亮太郎</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3>
+                            <p class="font-semibold my-2">担当サービス: カウンセリング, 高齢者支援, 買い物代行</p>
+                            <p class="text-gray-600 leading-relaxed">はじめまして。カウンセリングはクライエントさんの声にじっくり耳を傾けることを大切にしています。今、どんなことに悩んでいるのか。不安やイライラ、どうしたらいいか分からない状態、気分の落ち込みなどを、話をすることで、つらい気持ちが少しでも楽になれるよう気持ちを受け止めていきたいと思います。又、クライエントさんの想いや価値観を大切にしながら、今の生きづらさが減って、自分らしく楽に生きられるようにお役に立ちたいと思っています。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div>
+                        </div>
+                    </div>
+                    <!-- Staff Card: 古橋渉 -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["koureisha", "counseling"]'>
+                        <img src="https://placehold.co/150x150/fed7aa/333333?text=W.F" alt="古橋渉氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-blue-600">古橋 渉</span> <span class="text-base font-normal text-gray-500 ml-2">介護福祉士</span></h3>
+                            <p class="font-semibold my-2">担当サービス: 高齢者支援, カウンセリング</p>
+                            <p class="text-gray-600 leading-relaxed">こんにちは、古橋渉と申します。介護福祉士として長年の経験を積んできました。高齢者の皆さまの日常生活をサポートし、安心して過ごせる環境づくりに取り組んでいます。また、ご家族の方々のお悩みやご相談にも真摯に対応させていただきます。一人ひとりのペースに合わせて、丁寧にサポートいたします。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">3,500円/時間</div>
+                        </div>
+                    </div>
+                    <!-- Staff Card: 岩田煌空鳳 -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["counseling"]'>
+                        <img src="https://placehold.co/150x150/e9d5ff/333333?text=K.I" alt="岩田煌空鳳氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-blue-600">岩田 煌空鳳 (かぐや)</span> <span class="text-base font-normal text-gray-500 ml-2">カウンセラー</span></h3>
+                            <p class="font-semibold my-2">担当サービス: カウンセリング</p>
+                            <p class="text-gray-600 leading-relaxed">閲覧頂きありがとうございます。初めまして岩田煌空鳳（かぐや）と申します。僕はまだ20歳で人生経験が浅いですが、特に若い世代の方達には、色々な話をより親身に近くで貴方のお話を聴けると思います。あなたが自然と笑えるようになるまで色々なサポートをしていきたいと考えています。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">2,500円/時間</div>
+                        </div>
+                    </div>
+                    <!-- Staff Card: 藤本和廣 -->
+                    <div class="staff-card bg-gray-50 rounded-lg shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6" data-services='["counseling", "kaimono"]'>
+                        <img src="teko.jpg" alt="藤本和廣氏のポートレート" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto md:mx-0 flex-shrink-0 border-4 border-white shadow-md">
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-2xl font-bold"><span class="text-blue-600">藤本 和廣</span> <span class="text-base font-normal text-gray-500 ml-2">代表</span></h3>
+                            <p class="font-semibold my-2">担当サービス: カウンセリング (恋愛, 仕事, 悩み事全般), 買い物代行</p>
+                            <p class="text-gray-600 leading-relaxed">初めまして。代表の藤本と申します。私自身の様々な経験を活かし、クライエントさんの心が少しでも軽くなるように努めたいと考えています。</p>
+                            <div class="mt-3 text-lg font-bold text-orange-500">3,000円/時間</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -339,22 +399,54 @@
                 });
             });
             
-            // Email De-obfuscation to prevent spam bots
+            // Email De-obfuscation
             const user = 'akss20250703';
             const domain = 'gmail.com';
             const emailAddress = `${user}@${domain}`;
-            
             const emailContactBox = document.getElementById('email-contact-box');
             if(emailContactBox) {
                 emailContactBox.addEventListener('click', () => {
                     window.location.href = `mailto:${emailAddress}`;
                 });
             }
-
             const emailFooterEl = document.getElementById('email-footer');
             if (emailFooterEl) {
                 emailFooterEl.innerHTML = `<a href="mailto:${emailAddress}" class="hover:text-white transition">${emailAddress}</a>`;
             }
+
+            // Staff Filter
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const staffCards = document.querySelectorAll('.staff-card');
+
+            filterButtons.forEach(button => {
+                // Add common styles to filter buttons
+                button.classList.add('px-4', 'py-2', 'text-sm', 'md:text-base', 'font-semibold', 'rounded-full', 'transition', 'duration-300', 'border', 'border-gray-300', 'hover:bg-blue-500', 'hover:text-white', 'hover:border-blue-500');
+                
+                button.addEventListener('click', () => {
+                    // Manage active state for buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filter = button.dataset.filter;
+
+                    staffCards.forEach(card => {
+                        const services = JSON.parse(card.dataset.services || '[]');
+                        if (filter === 'all' || services.includes(filter)) {
+                            card.style.display = 'flex';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 50);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(10px)';
+                            setTimeout(() => {
+                                card.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
         });
     </script>
 </body>
