@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自然演繹 問題生成プログラム (教科書スタイル版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+        }
+        .logic-font {
+             font-family: 'Inter', 'Times New Roman', serif;
+        }
+
+        /* Proof Tree Styles */
+        .proof-tree-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+            padding: 2rem 1rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+        }
+        .dark .proof-tree-wrapper {
+            background-color: #2c3e50;
+            border-color: #34495e;
+        }
+
+        .proof-step {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0 0.75rem;
+        }
+
+        .premises-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1.5rem;
+        }
+
+        .inference-rule {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.25rem;
+        }
+
+        .inference-line {
+            flex-grow: 1;
+            height: 1.5px;
+            background-color: #343a40; /* Line color for light mode */
+        }
+        .dark .inference-line {
+            background-color: #9ca3af; /* Brighter line color for dark mode */
+        }
+
+        .rule-label {
+            padding-left: 0.75rem;
+            font-size: 1rem;
+            font-family: 'Times New Roman', serif;
+            color: #495057;
+        }
+        .dark .rule-label {
+             color: #bdc3c7; /* Rule label color for dark mode */
+        }
+
+        .conclusion, .premise {
+            padding: 0.1rem 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+            white-space: nowrap;
+            color: #212529; /* Main text color for light mode */
+        }
+        .dark .conclusion, .dark .premise {
+             color: #ecf0f1; /* Brighter main text for dark mode */
+        }
+        
+        .premise.assumption {
+            white-space: nowrap;
+        }
+
+        #solution-container {
+            transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex justify-center min-h-screen p-4 sm:p-8 py-12">
+
+    <div class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">自然演繹 問題ジェネレーター</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">教科書スタイルで学ぶ論理学</p>
+        </header>
+
+        <main>
+            <!-- 問題表示エリア -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-6">
+                <p class="text-center text-gray-600 dark:text-gray-400 text-sm mb-2">練習問題</p>
+                <p id="problem-statement" class="text-center text-xl md:text-2xl font-bold text-gray-900 dark:text-white logic-font">下のボタンを押して問題を開始してください</p>
+            </div>
+
+            <!-- 操作ボタン -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <button id="new-problem-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
+                    新しい問題
+                </button>
+                <button id="show-solution-btn" class="w-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors" disabled>
+                    解答と解説を表示
+                </button>
+            </div>
+
+            <!-- 解答表示エリア -->
+            <div id="solution-container" class="opacity-0 max-h-0 overflow-hidden">
+                 <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-5">
+                    <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-4 text-lg border-b pb-2">証明</h3>
+                    <div id="explanation-content" class="text-gray-700 dark:text-gray-300"></div>
+                 </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM要素の取得
+        const problemStatementEl = document.getElementById('problem-statement');
+        const newProblemBtn = document.getElementById('new-problem-btn');
+        const showSolutionBtn = document.getElementById('show-solution-btn');
+        const solutionContainer = document.getElementById('solution-container');
+        const explanationContentEl = document.getElementById('explanation-content');
+
+        // 論理記号
+        const AND = '∧';
+        const OR = '∨';
+        const NOT = '¬';
+        const IMPLIES = '→';
+        const META_IMPLIES = '⇒';
+
+        // 問題テンプレート
+        const problemTemplates = [
+            {
+                name: "条件法除去 (MP)",
+                problem: (A, B) => `${A} → ${B}, ${A} ${META_IMPLIES} ${B}`,
+                explanationSteps: (A, B) => [
+                    { type: 'text', content: `まず、前提として与えられている「${A} → ${B}」と「${A}」を確認します。これは条件法除去（→E）、別名モーダス・ポネンスと呼ばれる基本的な推論規則の形そのものです。` },
+                    { type: 'text', content: `以下の証明図のように、この規則を適用することで、結論である ${B} を直接導出できます。` },
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [`${A} → ${B}`, A] } }
+                ]
+            },
+            {
+                name: "条件法導入",
+                problem: (A, B, C) => `${A} → B ${META_IMPLIES} A → (B ∨ C)`,
+                explanationSteps: (A, B, C) => [
+                    { type: 'text', content: `結論が「${A} → (${B} ∨ ${C})」という条件文なので、条件法導入（→I）の利用を考えます。これは「${A} を仮定して ${B} ∨ ${C} を導く」という戦略です。` },
+                    { type: 'text', content: `まず、${A} を仮定(1)します。この仮定と前提「${A} → ${B}」から、条件法除去(→E)によって ${B} が得られます。` },
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] } },
+                    { type: 'text', content: `次に、得られた ${B} から、選言導入（∨I）を用いて ${B} ∨ ${C} を導きます。` },
+                    { type: 'tree', data: { conclusion: `${B} ∨ ${C}`, rule: `∨I`, premises: [B] } },
+                    { type: 'text', content: `これで、仮定(1)から ${B} ∨ ${C} を導くことができました。最後に、仮定を解消し、条件法導入によって結論「${A} → (${B} ∨ ${C})」が証明されます。以上の手順をまとめたものが、以下の完全な証明図です。` },
+                    { type: 'tree', data: { conclusion: `${A} → (${B} ∨ ${C})`, rule: `→I, 1`, premises: [{ conclusion: `${B} ∨ ${C}`, rule: `∨I`, premises: [{ conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] }] }] } }
+                ]
+            },
+            {
+                name: "背理法 (RAA)",
+                problem: (A, B) => `${A} → B, A → ¬B ${META_IMPLIES} ¬A`,
+                explanationSteps: (A, B) => [
+                    { type: 'text', content: `結論が否定形「¬A」なので、否定導入（¬I）、いわゆる背理法（RAA）の利用を考えます。これは「¬Aの否定（つまりA）を仮定して矛盾を導く」という戦略です。` },
+                    { type: 'text', content: `まず、 ${A} を仮定(1)します。この仮定から矛盾（⊥）を導くことを目指します。仮定 ${A} と前提「${A} → ${B}」から、条件法除去(→E)によって ${B} が得られます。` },
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] } },
+                    { type: 'text', content: `同様に、仮定 ${A} と前提「${A} → ¬${B}」から ¬${B} が得られます。` },
+                    { type: 'tree', data: { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → ¬B`] } },
+                    { type: 'text', content: `これにより、${B} と ¬${B} という互いに矛盾する命題が両方導かれたことになり、矛盾（⊥）が示されました。仮定(1)から矛盾が導かれたので、仮定は誤っていたことになり、その否定である ¬${A} が証明されます。以上の手順をまとめたものが、以下の完全な証明図です。` },
+                    { type: 'tree', data: { conclusion: `¬A`, rule: `¬I, 1`, premises: [{ conclusion: `⊥`, rule: `¬E`, premises: [ { conclusion: `B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] }, { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → ¬B`] }] }] } }
+                ]
+            },
+            {
+                name: "選言除去",
+                problem: (A, B, C) => `A ∨ B, A → C, B → C ${META_IMPLIES} C`,
+                explanationSteps: (A, B, C) => [
+                    { type: 'text', content: `前提に「${A} ∨ ${B}」という選言が含まれているため、選言除去（∨E）、いわゆる「場合分け証明」の利用を考えます。` },
+                    { type: 'text', content: `まず、ケース1として「${A}」が真であると仮定(1)します。この仮定と前提「${A} → ${C}」から、条件法除去(→E)によって ${C} が導けます。` },
+                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → C`] } },
+                    { type: 'text', content: `次に、ケース2として「${B}」が真であると仮定(2)します。同様に、この仮定と前提「${B} → ${C}」から、条件法除去(→E)によって ${C} が導けます。` },
+                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `B → C`] } },
+                    { type: 'text', content: `両方のケースで結論 ${C} が導かれたことを確認できました。したがって、選言除去の規則を適用し、前提「${A} ∨ ${B}」と2つのケースの証明から、最終的な結論 ${C} を導出できます。以上の手順をまとめたものが、以下の完全な証明図です。` },
+                    { type: 'tree', data: { conclusion: C, rule: `∨E, 1, 2`, premises: [ `A ∨ B`, { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → C`] }, { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `B → C`] } ] } }
+                ]
+            }
+        ];
+        
+        let currentExplanationSteps = [];
+
+        // 証明木をHTMLにレンダリングする再帰関数
+        function renderProofTree(node) {
+            if (typeof node === 'string') {
+                return `<div class="proof-step"><div class="premise logic-font">${node}</div></div>`;
+            }
+            if (node.isAssumption) {
+                return `<div class="proof-step"><div class="premise assumption logic-font">[${node.conclusion}]<sup>${node.num}</sup></div></div>`;
+            }
+
+            // 仮定が左に来るように前提をソートする
+            const sortedPremises = [...node.premises].sort((a, b) => {
+                const aIsAssumption = typeof a === 'object' && a.isAssumption;
+                const bIsAssumption = typeof b === 'object' && b.isAssumption;
+                if (aIsAssumption && !bIsAssumption) return -1;
+                if (!aIsAssumption && bIsAssumption) return 1;
+                return 0;
+            });
+
+            const premisesHtml = sortedPremises.map(p => renderProofTree(p)).join('');
+
+            return `
+                <div class="proof-step">
+                    <div class="premises-container">${premisesHtml}</div>
+                    <div class="inference-rule">
+                        <div class="inference-line"></div>
+                        <span class="rule-label">${node.rule}</span>
+                    </div>
+                    <div class="conclusion logic-font">${node.conclusion}</div>
+                </div>
+            `;
+        }
+        
+        function generateNewProblem() {
+            const template = problemTemplates[Math.floor(Math.random() * problemTemplates.length)];
+            
+            const vars = ['A', 'B', 'C'];
+            const problemText = template.problem(...vars);
+            currentExplanationSteps = template.explanationSteps(...vars);
+
+            problemStatementEl.textContent = problemText;
+            
+            hideSolution();
+            showSolutionBtn.disabled = false;
+        }
+
+        function showSolution() {
+            if (!currentExplanationSteps || currentExplanationSteps.length === 0) return;
+            
+            const contentHtml = currentExplanationSteps.map(step => {
+                if (step.type === 'text') {
+                    return `<p class="mb-4">${step.content}</p>`;
+                } else if (step.type === 'tree') {
+                    const treeHtml = renderProofTree(step.data);
+                    return `<div class="proof-tree-wrapper my-6">${treeHtml}</div>`;
+                }
+                return '';
+            }).join('');
+
+            explanationContentEl.innerHTML = contentHtml;
+
+            solutionContainer.classList.remove('opacity-0', 'max-h-0');
+            solutionContainer.classList.add('opacity-100');
+            // Use a large enough max-height to ensure all content is visible.
+            solutionContainer.style.maxHeight = '5000px'; 
+        }
+
+        function hideSolution() {
+            solutionContainer.classList.add('opacity-0', 'max-h-0');
+            solutionContainer.classList.remove('opacity-100');
+        }
+
+        newProblemBtn.addEventListener('click', generateNewProblem);
+        showSolutionBtn.addEventListener('click', showSolution);
+    </script>
+</body>
+</html>
