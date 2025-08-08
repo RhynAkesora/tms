@@ -58,10 +58,10 @@
         .inference-line {
             flex-grow: 1;
             height: 1.5px;
-            background-color: #343a40; /* Line color for light mode */
+            background-color: #343a40;
         }
         .dark .inference-line {
-            background-color: #9ca3af; /* Brighter line color for dark mode */
+            background-color: #9ca3af;
         }
 
         .rule-label {
@@ -71,7 +71,7 @@
             color: #495057;
         }
         .dark .rule-label {
-             color: #bdc3c7; /* Rule label color for dark mode */
+             color: #bdc3c7;
         }
 
         .conclusion, .premise {
@@ -79,10 +79,10 @@
             font-size: 1.2rem;
             font-weight: 500;
             white-space: nowrap;
-            color: #212529; /* Main text color for light mode */
+            color: #212529;
         }
         .dark .conclusion, .dark .premise {
-             color: #ecf0f1; /* Brighter main text for dark mode */
+             color: #ecf0f1;
         }
         
         .premise.assumption {
@@ -99,7 +99,6 @@
     <div class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
         <header class="text-center mb-8">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">自然演繹 問題ジェネレーター</h1>
-            <p class="text-gray-500 dark:text-gray-400 mt-2">論理学</p>
         </header>
 
         <main>
@@ -152,7 +151,7 @@
                 explanationSteps: (A, B) => [
                     { type: 'text', content: `まず、前提として与えられている「${A} → ${B}」と「${A}」を確認します。これは条件法除去（→E）、別名モーダス・ポネンスと呼ばれる基本的な推論規則の形そのものです。` },
                     { type: 'text', content: `以下の証明図のように、この規則を適用することで、結論である ${B} を直接導出できます。` },
-                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [`${A} → ${B}`, A] } }
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [A, `${A} → ${B}`] } }
                 ]
             },
             {
@@ -161,11 +160,11 @@
                 explanationSteps: (A, B, C) => [
                     { type: 'text', content: `結論が「${A} → (${B} ∨ ${C})」という条件文なので、条件法導入（→I）の利用を考えます。これは「${A} を仮定して ${B} ∨ ${C} を導く」という戦略です。` },
                     { type: 'text', content: `まず、${A} を仮定(1)します。この仮定と前提「${A} → ${B}」から、条件法除去(→E)によって ${B} が得られます。` },
-                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] } },
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → B`] } },
                     { type: 'text', content: `次に、得られた ${B} から、選言導入（∨I）を用いて ${B} ∨ ${C} を導きます。` },
                     { type: 'tree', data: { conclusion: `${B} ∨ ${C}`, rule: `∨I`, premises: [B] } },
                     { type: 'text', content: `これで、仮定(1)から ${B} ∨ ${C} を導くことができました。最後に、仮定を解消し、条件法導入によって結論「${A} → (${B} ∨ ${C})」が証明されます。以上の手順をまとめたものが、以下の完全な証明図です。` },
-                    { type: 'tree', data: { conclusion: `${A} → (${B} ∨ ${C})`, rule: `→I, 1`, premises: [{ conclusion: `${B} ∨ ${C}`, rule: `∨I`, premises: [{ conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] }] }] } }
+                    { type: 'tree', data: { conclusion: `${A} → (${B} ∨ ${C})`, rule: `→I, 1`, premises: [{ conclusion: `${B} ∨ ${C}`, rule: `∨I`, premises: [{ conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → B`] }] }] } }
                 ]
             },
             {
@@ -174,11 +173,11 @@
                 explanationSteps: (A, B) => [
                     { type: 'text', content: `結論が否定形「¬A」なので、否定導入（¬I）、いわゆる背理法（RAA）の利用を考えます。これは「¬Aの否定（つまりA）を仮定して矛盾を導く」という戦略です。` },
                     { type: 'text', content: `まず、 ${A} を仮定(1)します。この仮定から矛盾（⊥）を導くことを目指します。仮定 ${A} と前提「${A} → ${B}」から、条件法除去(→E)によって ${B} が得られます。` },
-                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] } },
+                    { type: 'tree', data: { conclusion: B, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → B`] } },
                     { type: 'text', content: `同様に、仮定 ${A} と前提「${A} → ¬${B}」から ¬${B} が得られます。` },
-                    { type: 'tree', data: { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → ¬B`] } },
+                    { type: 'tree', data: { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → ¬B`] } },
                     { type: 'text', content: `これにより、${B} と ¬${B} という互いに矛盾する命題が両方導かれたことになり、矛盾（⊥）が示されました。仮定(1)から矛盾が導かれたので、仮定は誤っていたことになり、その否定である ¬${A} が証明されます。以上の手順をまとめたものが、以下の完全な証明図です。` },
-                    { type: 'tree', data: { conclusion: `¬A`, rule: `¬I, 1`, premises: [{ conclusion: `⊥`, rule: `¬E`, premises: [ { conclusion: `B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → B`] }, { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → ¬B`] }] }] } }
+                    { type: 'tree', data: { conclusion: `¬A`, rule: `¬I, 1`, premises: [{ conclusion: `⊥`, rule: `¬E`, premises: [ { conclusion: `B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → B`] }, { conclusion: `¬B`, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → ¬B`] }] }] } }
                 ]
             },
             {
@@ -187,11 +186,11 @@
                 explanationSteps: (A, B, C) => [
                     { type: 'text', content: `前提に「${A} ∨ ${B}」という選言が含まれているため、選言除去（∨E）、いわゆる「場合分け証明」の利用を考えます。` },
                     { type: 'text', content: `まず、ケース1として「${A}」が真であると仮定(1)します。この仮定と前提「${A} → ${C}」から、条件法除去(→E)によって ${C} が導けます。` },
-                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → C`] } },
+                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → C`] } },
                     { type: 'text', content: `次に、ケース2として「${B}」が真であると仮定(2)します。同様に、この仮定と前提「${B} → ${C}」から、条件法除去(→E)によって ${C} が導けます。` },
-                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `B → C`] } },
+                    { type: 'tree', data: { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `${B} → C`] } },
                     { type: 'text', content: `両方のケースで結論 ${C} が導かれたことを確認できました。したがって、選言除去の規則を適用し、前提「${A} ∨ ${B}」と2つのケースの証明から、最終的な結論 ${C} を導出できます。以上の手順をまとめたものが、以下の完全な証明図です。` },
-                    { type: 'tree', data: { conclusion: C, rule: `∨E, 1, 2`, premises: [ `A ∨ B`, { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `A → C`] }, { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `B → C`] } ] } }
+                    { type: 'tree', data: { conclusion: C, rule: `∨E, 1, 2`, premises: [ `A ∨ B`, { conclusion: C, rule: `→E`, premises: [{ conclusion: A, isAssumption: true, num: 1 }, `${A} → C`] }, { conclusion: C, rule: `→E`, premises: [{ conclusion: B, isAssumption: true, num: 2 }, `${B} → C`] } ] } }
                 ]
             }
         ];
@@ -200,6 +199,20 @@
 
         // 証明木をHTMLにレンダリングする再帰関数
         function renderProofTree(node) {
+            // 前提の複雑さを計算するヘルパー関数
+            const getComplexity = (p) => {
+                if (typeof p === 'string') {
+                    return p.length; // 文字列の長さで複雑さを判断
+                }
+                if (typeof p === 'object' && p.isAssumption) {
+                    return p.conclusion.length; // 仮定も同様
+                }
+                if (typeof p === 'object' && p.conclusion) {
+                    return 1000 + p.conclusion.length; // サブ証明は最も複雑
+                }
+                return 100;
+            };
+
             if (typeof node === 'string') {
                 return `<div class="proof-step"><div class="premise logic-font">${node}</div></div>`;
             }
@@ -207,14 +220,8 @@
                 return `<div class="proof-step"><div class="premise assumption logic-font">[${node.conclusion}]<sup>${node.num}</sup></div></div>`;
             }
 
-            // 仮定が左に来るように前提をソートする
-            const sortedPremises = [...node.premises].sort((a, b) => {
-                const aIsAssumption = typeof a === 'object' && a.isAssumption;
-                const bIsAssumption = typeof b === 'object' && b.isAssumption;
-                if (aIsAssumption && !bIsAssumption) return -1;
-                if (!aIsAssumption && bIsAssumption) return 1;
-                return 0;
-            });
+            // 前提を複雑さの昇順（単純なものが左）にソート
+            const sortedPremises = [...node.premises].sort((a, b) => getComplexity(a) - getComplexity(b));
 
             const premisesHtml = sortedPremises.map(p => renderProofTree(p)).join('');
 
@@ -260,7 +267,6 @@
 
             solutionContainer.classList.remove('opacity-0', 'max-h-0');
             solutionContainer.classList.add('opacity-100');
-            // Use a large enough max-height to ensure all content is visible.
             solutionContainer.style.maxHeight = '5000px'; 
         }
 
