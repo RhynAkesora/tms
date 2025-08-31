@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物販リスト</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
+
+```
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Noto Sans JP', sans-serif;
+        background: white;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    .merchandise-card {
+        background: white;
+        border-radius: 15px;
+        border: 2px solid #667eea;
+        padding: 30px;
+        max-width: 210mm;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto;
+        height: fit-content;
+    }
+
+    .merchandise-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    }
+
+    .title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .items-section {
+        margin-bottom: 30px;
+    }
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        margin: 10px 0;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 15px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .item:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .item-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: left;
+        flex: 1;
+    }
+
+    .item-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #e74c3c;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .payment-section {
+        margin: 30px 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #e8f5e8, #f0f8ff);
+        border-radius: 15px;
+        border-left: 5px solid #4ecdc4;
+    }
+
+    .payment-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .payment-info {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .qr-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #fff5f5, #f0f8ff);
+        border-radius: 15px;
+    }
+
+    .qr-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .qr-code {
+        display: inline-block;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+    }
+
+    .qr-placeholder {
+        width: 120px;
+        height: 120px;
+        background: #f8f9fa;
+        border: 2px dashed #667eea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 0.8rem;
+        color: #667eea;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .website-url {
+        margin-top: 10px;
+        font-size: 1rem;
+        color: #667eea;
+        font-weight: 600;
+        word-break: break-all;
+    }
+
+    @media (max-width: 480px) {
+        .merchandise-card {
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .title {
+            font-size: 2rem;
+        }
+        
+        .item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .item-name {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .item-price {
+            align-self: center;
+        }
+    }
+
+    @media print {
+        body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .merchandise-card {
+            box-shadow: none !important;
+            max-width: none !important;
+            border: 2px solid #667eea !important;
+            margin: 0 !important;
+            page-break-inside: avoid;
+        }
+        
+        .merchandise-card::before {
+            display: block !important;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="merchandise-card">
+        <h1 class="title">🎵 物販リスト 🎵</h1>
+
+```
+    <div class="items-section">
+        <div class="item">
+            <span class="item-name">📱 スマホ撮影</span>
+            <span class="item-price">¥1,000</span>
+        </div>
+        
+        <div class="item">
+            <span class="item-name">💿 アルバム「Black Roses」</span>
+            <span class="item-price">¥2,561</span>
+        </div>
+        
+        <div class="item">
+            <span class="item-name">🎵 シングル「The Battlefront/風 吹く限り」</span>
+            <span class="item-price">¥1,260</span>
+        </div>
+        
+        <div class="item">
+            <span class="item-name">🍀 お手製お守り</span>
+            <span class="item-price">¥1,000</span>
+        </div>
+    </div>
+
+    <div class="payment-section">
+        <div class="payment-title">💳 お支払い方法</div>
+        <div class="payment-info">
+            <strong>基本：PayPay のみ対応</strong><br>
+            現金でも対応しますが、お釣りは出ません
+        </div>
+    </div>
+
+    <div class="qr-section">
+        <div class="qr-title">🌐 公式ウェブサイト</div>
+        <div class="qr-code">
+            <div class="qr-placeholder">
+                📱<br>
+                QRコードを<br>
+                手動追加<br>
+                してください
+            </div>
+        </div>
+        <div class="website-url">https://rhyn.jp</div>
+    </div>
+</div>
+```
+
+</body>
+</html>
