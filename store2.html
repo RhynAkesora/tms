@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>開運エキスポ メニュー</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Noto Sans JP', sans-serif;
+        background: white;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    .merchandise-card {
+        background: white;
+        border-radius: 15px;
+        border: 2px solid #667eea;
+        padding: 30px;
+        max-width: 210mm;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto;
+        height: fit-content;
+    }
+
+    .merchandise-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #84fab0, #8fd3f4, #a1c4fd, #fbc2eb);
+    }
+
+    .title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .items-section {
+        margin-bottom: 30px;
+    }
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        margin: 10px 0;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 15px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .item:hover {
+        border-color: #84fab0;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(132, 250, 176, 0.3);
+    }
+
+    .item-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: left;
+        flex: 1;
+        line-height: 1.5;
+    }
+
+    .item-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #e74c3c;
+        background: linear-gradient(45deg, #2c3e50, #4a69bd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        padding-left: 15px;
+    }
+
+    .payment-section {
+        margin: 30px 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #e8f5e8, #f0f8ff);
+        border-radius: 15px;
+        border-left: 5px solid #84fab0;
+    }
+
+    .payment-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .payment-info {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .qr-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #fff5f5, #f0f8ff);
+        border-radius: 15px;
+    }
+
+    .qr-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .qr-code {
+        display: inline-block;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+    }
+
+    .website-url {
+        margin-top: 10px;
+        font-size: 1rem;
+        color: #667eea;
+        font-weight: 600;
+        word-break: break-all;
+    }
+
+    @media (max-width: 480px) {
+        .merchandise-card {
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .title {
+            font-size: 2rem;
+        }
+        
+        .item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .item-name {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .item-price {
+            align-self: center;
+            padding-left: 0;
+        }
+    }
+
+    @media print {
+        body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        .merchandise-card {
+            box-shadow: none !important;
+            max-width: none !important;
+            border: 2px solid #667eea !important;
+            margin: 0 !important;
+            page-break-inside: avoid;
+        }
+        
+        .merchandise-card::before {
+            display: block !important;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="merchandise-card">
+        <h1 class="title">✨ 開運エキスポ メニュー ✨</h1>
+        <div class="items-section">
+            <div class="item">
+                <span class="item-name">◆ 心身を整える【合氣活法】体験（お守り付）</span>
+                <span class="item-price">¥1,000</span>
+            </div>
+            
+            <div class="item">
+                <span class="item-name">◆【氣の調整】認知科学氣功ヒーリング (10分)</span>
+                <span class="item-price">¥1,000</span>
+            </div>
+            
+            <div class="item">
+                <span class="item-name">◆【思考の整理】ブッダの実践知セッション＋心の浄化ヒーリング (20分)</span>
+                <span class="item-price">¥3,000</span>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <div class="payment-title">💳 お支払い方法</div>
+            <div class="payment-info">
+                <strong>現金とPayPayがご利用いただけます。</strong>
+            </div>
+        </div>
+
+        <div class="qr-section">
+            <div class="qr-title">🌐 公式ウェブサイト</div>
+            <div class="qr-code">
+                <img src="https://rhyn.jp/wp-content/uploads/2024/02/veriquest_qr-1.png" alt="QR Code for https://rhyn.jp" width="120" height="120" style="border-radius: 8px;">
+            </div>
+            <div class="website-url">https://rhyn.jp</div>
+        </div>
+    </div>
+</body>
+</html>
